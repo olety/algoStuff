@@ -80,6 +80,22 @@ void drawChristmasTree(int size){
     }
 }
 
+// size from 2 to 20
+void drawFigureX(int size){
+}
+
+// size from 2 to 20
+void drawFigureY(int size){
+}
+
+// size from 3 to 20
+void drawFigureZ(int size){
+}
+
+// size from 2 to 20
+void drawFigureW(int size){
+}
+
 bool isCommand(const string command,const char *mnemonic){
     return command==mnemonic;
 }
@@ -122,7 +138,7 @@ int main(){
         }
         if(isCommand(command,"SQ"))
         {
-            drawTriangle(value);
+            drawSquare(value);
             continue;
         }
         if(isCommand(command,"PY"))
