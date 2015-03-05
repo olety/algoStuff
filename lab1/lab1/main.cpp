@@ -52,7 +52,7 @@ void drawPyramid(int size){
     }
 }
 
-// supporting func to make drawXmasTree
+// supporting func to make drawChristmasTree
 void drawPyramidPosition(int size, int where, char* line){
     int i;
     if ( size == 1 ){
