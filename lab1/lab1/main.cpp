@@ -41,13 +41,13 @@ void drawPyramid(int size){
     }
     char line [400];
     int i;
-    for ( i = 0 ; i < (1 + 2 * size); i++){
+    for ( i = 0 ; i < (1 + size); i++){
         line[i] = ' ';
     }
-    line[i] = '\0';
     for ( i = 0; i < size; i++ ){
         line[size - i - 1 ] = 'X';
         line[size + i - 1 ] = 'X';
+        line[size + i] = '\0';
         cout << line << endl;
     }
 }
@@ -61,13 +61,13 @@ void drawPyramidPosition(int size, int where, char* line){
         cout << "X\n";
         return;
     }
-    for ( i = 0 ; i < (1 + 2 * size + where); i++){
+    for ( i = 0 ; i < (1 + size + where); i++){
         line[i] = ' ';
     }
-    line[i] = '\0';
     for ( i = 0; i < size; i++ ){
         line[ where - i - 1 ] = 'X';
         line[ where + i - 1 ] = 'X';
+        line[ where + i ] = '\0';
         cout << line << endl;
     }
 }
