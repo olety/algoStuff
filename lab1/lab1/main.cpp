@@ -1,7 +1,11 @@
+
 #include <stdio.h>
-#include <string.h>
 #include <iostream>
+#include <string>
+#include <sstream>
+
 using namespace std;
+
 // size from 2 to 20
 /*
  X
@@ -76,45 +80,83 @@ void drawChristmasTree(int size){
     }
 }
 
-// size from 2 to 20
-void drawfigureX(int size){
-}
-// size from 2 to 20
-void drawfigureY(int size){
-}
-// size from 3 to 20
-void drawfigureZ(int size){
-}
-// size from 2 to 20
-void drawfigureW(int size){
+bool isCommand(const string command,const char *mnemonic){
+    return command==mnemonic;
 }
 
 int main(){
-    const int MAXLINE=100;
-    char line[MAXLINE];
-    char oneChar;
+    string line;
+    string command;
     int value;
+    cout << "START" << endl;
     while(true){
-        cin >> oneChar;
-        if(oneChar=='#')
+        //		cin.getline(line, MAXLINE);
+        getline(cin,line);
+        std::stringstream stream(line);
+        stream >> command;
+        if(line=="" || command[0]=='#')
         {
-            cin.getline(line, MAXLINE);
+            // ignore empty line and comment
             continue;
         }
-        if(oneChar=='E')
+        
+        // copy line on output with exclamation mark
+        cout << "!" << line << endl;;
+        
+        // change to uppercase
+        command[0]=toupper(command[0]);
+        command[1]=toupper(command[1]);
+        
+        if(isCommand(command,"HA")){
+            cout << "END OF EXECUTION" << endl;
             break;
-        // read next argument, one int value
-        cin >> value;
-        switch(oneChar){
-            case 'T': drawTriangle(value); break;
-            case 'S': drawSquare(value); break;
-            case 'P': drawPyramid(value); break;
-            case 'C': drawChristmasTree(value); break;
-            case 'X': drawfigureX(value); break;
-            case 'Y': drawfigureY(value); break;
-            case 'Z': drawfigureZ(value); break;
-            case 'W': drawfigureW(value); break;
         }
+        
+        // read next argument, one int value
+        stream >> value;
+        
+        if(isCommand(command,"TR"))
+        {
+            drawTriangle(value);
+            continue;
+        }
+        if(isCommand(command,"SQ"))
+        {
+            drawTriangle(value);
+            continue;
+        }
+        if(isCommand(command,"PY"))
+        {
+            drawPyramid(value);
+            continue;
+        }
+        if(isCommand(command,"CT"))
+        {
+            drawChristmasTree(value);
+            continue;
+        }
+        if(isCommand(command,"FX"))
+        {
+            drawFigureX(value);
+            continue;
+        }
+        if(isCommand(command,"FY"))
+        {
+            drawFigureY(value);
+            continue;
+        }
+        if(isCommand(command,"FZ"))
+        {
+            drawFigureZ(value);
+            continue;
+        }
+        if(isCommand(command,"FW"))
+        {
+            drawFigureW(value);
+            continue;
+        }
+        
+        cout << "wrong argument in test: " << command << endl;
     }
-    cout << "END OF EXECUTION" << endl;
+    
 }
