@@ -13,7 +13,7 @@ using namespace std;
  XXX
  */
 void drawTriangle(int size){
-    for ( int i = 1; i <= size; i++ ){
+    for ( int i = size; i >= 1; i-- ){
         for ( int j = 1; j <= i; j++ ){
             cout << "X";
         }
@@ -41,12 +41,12 @@ void drawPyramid(int size){
     }
     char line [400];
     int i;
-    for ( i = 0 ; i < (1 + size); i++){
-        line[i] = ' ';
+    for ( i = 0 ; i < (1 + size*2); i++){
+        line[i] = 'X';
     }
-    for ( i = 0; i < size; i++ ){
-        line[size - i - 1 ] = 'X';
-        line[size + i - 1 ] = 'X';
+    for ( i = size; i > 0; i-- ){
+        line[size - i - 1 ] = ' ';
+        line[size + i - 1 ] = ' ';
         line[size + i] = '\0';
         cout << line << endl;
     }
@@ -61,12 +61,12 @@ void drawPyramidPosition(int size, int where, char* line){
         cout << "X\n";
         return;
     }
-    for ( i = 0 ; i < (1 + size + where); i++){
-        line[i] = ' ';
+    for ( i = (where-size) ; i < (1 + size*2 + where); i++){
+        line[i] = 'X';
     }
-    for ( i = 0; i < size; i++ ){
-        line[ where - i - 1 ] = 'X';
-        line[ where + i - 1 ] = 'X';
+    for ( i = size; i > 0; i-- ){
+        line[ where - i - 1 ] = ' ';
+        line[ where + i - 1 ] = ' ';
         line[ where + i ] = '\0';
         cout << line << endl;
     }
@@ -75,8 +75,9 @@ void drawPyramidPosition(int size, int where, char* line){
 // size from 1 to 20
 void drawChristmasTree(int size){
     char line [400];
-    for ( int i = 1; i <= size; i++ ){
-        drawPyramidPosition(i, (1 + 2 * size)/2, line);
+    int size_temp = size;
+    for ( int i = size; i >= 1; i-- ){
+        drawPyramidPosition(i, (1 + 2 * size_temp)/2, line);
     }
 }
 
