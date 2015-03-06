@@ -7,25 +7,58 @@ using namespace std;
 
 class Queue{
 public:
+    //destructor
+//    ~Queue(){
+//        delete arr;
+//    }
+    int *arr = nullptr;
+    int size;
+    int pos;
 };
 
+bool isEmpty(Queue& q){
+    return ( q.pos == 0 || q.arr == nullptr );
+}
+
+bool isFull(Queue& q){
+    return ( q.pos >= q.size || q.arr == nullptr );
+}
+
 void init(Queue& q, int size){
+    //delete q;
+    Queue *temp = new Queue();
+    temp->arr = new int();
+    temp->pos = 0;
+    temp->size = size;
+    q = *temp;
 }
 
 bool enqueue(Queue& q, int value){
-    return false;
+    if ( isFull(q) )
+        return false;
+    
+    q.arr[q.pos++] = value;
+    return true;
 }
 
 bool dequeue(Queue& q, int &value){
-    return false;
+    if ( isEmpty(q))
+        return false;
+    
+    value = q.arr[0];
+    for (int i = 0; i < (q.pos - 1); i++){
+        q.arr[i] = q.arr[i+1];
+    }
+    --q.pos;
+    return true;
 }
-bool isEmpty(Queue& q){
-    return false;
-}
-bool isFull(Queue& q){
-    return false;
-}
+
 void show(Queue& q){
+    for ( int i = 0; i < q.pos; i++)
+    {
+        cout << q.arr[i] << ",";
+    }
+    cout << endl;
 }
 
 
@@ -44,7 +77,7 @@ bool isCommand(const string command,const char *mnemonic){
 int main(){
     string line;
     string command;
-    Queue *queue;
+    Queue *queue = nullptr;
     int currentQ=0;
     int value;
     cout << "START" << endl;
