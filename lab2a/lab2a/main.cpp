@@ -11,17 +11,17 @@ public:
 //    ~Queue(){
 //        delete arr;
 //    }
-    int *arr = nullptr;
+    int *arr;
     int size;
     int pos;
 };
 
 bool isEmpty(Queue& q){
-    return ( q.pos == 0 || q.arr == nullptr );
+    return ( q.pos == 0 );
 }
 
 bool isFull(Queue& q){
-    return ( q.pos >= q.size || q.arr == nullptr );
+    return ( q.pos >= q.size );
 }
 
 void init(Queue& q, int size){
@@ -77,7 +77,7 @@ bool isCommand(const string command,const char *mnemonic){
 int main(){
     string line;
     string command;
-    Queue *queue = nullptr;
+    Queue *queue = NULL;
     int currentQ=0;
     int value;
     cout << "START" << endl;
