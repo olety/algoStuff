@@ -6,45 +6,145 @@
 using namespace std;
 
 struct Element{
+    Element *next;
+    int val;
 };
 
-struct List{
-};
+typedef struct List{
+    Element *head;
+} List;
 
 void init(List& l){
+    List *temp = new List;
+    temp->head = new Element;
+    temp->head->next = NULL;
+    temp->head->val = NULL;
+    l = *temp;
 }
 
 void insertHead(List& l, int x){
+    Element *temp_head;
+    temp_head->next = l.head;
+    temp_head->val = x;
+    l.head = temp_head;
 }
 
 bool deleteHead(List& l, int &oldHead){
-    return false;
+    if ( l.head == NULL ){
+        return false;
+    }
+    Element *tempHead = l.head;
+    oldHead = l.head->val;
+    l.head = l.head->next;
+    delete tempHead;
+    return true;
 }
 
 void insertTail(List& l, int x){
+    Element *temp_head = l.head;
+    Element *tail;
+    tail->next = NULL;
+    tail->val = x;
+    while ( temp_head->next != NULL )
+        temp_head = temp_head->next;
+    temp_head->next = tail;
 }
 
 bool deleteTail(List& l, int &oldTail){
+    if ( l.head == NULL ){
+        return false;
+    }
+    Element *prev_elem = NULL,*temp_elem = l.head;
+    while ( temp_elem->next != NULL ){
+        prev_elem = temp_elem;
+        temp_elem = temp_elem->next;
+    }
+    prev_elem->next = NULL;
+    oldTail = temp_elem->val;
+    delete temp_elem;
     return false;
 }
 
 int findPosOfValue(List& l, int value){
+    Element *temp_elem = l.head;
+    int i = 0;
+    
+    if ( l.head->next == NULL && l.head->val == value)
+        return i;
+    
+    while ( temp_elem->next != NULL ){
+        temp_elem = temp_elem->next;
+        i++;
+        if ( temp_elem->val == value){
+            return i;
+        }
+    }
     return -1;
 }
 
 bool deleteValue(List& l, int value){
+    Element *prev_elem = NULL;
+    Element *temp_elem = l.head;
+    
+    
+    if ( l.head->next == NULL && l.head->val == value){
+        int i;
+        return deleteHead(l, i);
+    }
+    
+    while ( temp_elem->next != NULL ){
+        prev_elem = temp_elem;
+        temp_elem = temp_elem->next;
+        if ( temp_elem->val == value){
+            prev_elem->next = temp_elem->next;
+            delete temp_elem;
+            return true;
+        }
+    }
+    
     return false;
 }
 
 bool atPosition(List& l, int pos, int &value){
-    return false;
+    if ( pos < 0 )
+        return false;
+    
+    Element *temp_elem = l.head;
+    for ( int i = 0; i < pos; i++){
+        if ( temp_elem->next == NULL){
+            return false;
+        }
+        
+        temp_elem = temp_elem->next;
+    }
+    value = temp_elem->val;
+    return true;
 }
 
 void showListFromHead(List& l){
+    if ( l.head == NULL ){
+        cout << endl;
+        return;
+    }
+    
+    if ( l.head->next == NULL ){
+        cout << l.head->val << "," << endl;
+        return;
+    }
+    
+    Element *temp_elem = l.head;
+    while ( temp_elem->next != NULL ) {
+        cout << temp_elem->val << ",";
+        temp_elem = temp_elem->next;
+    }
+    cout << endl;
 }
 
 void clearList(List& l){
-    
+    int i;
+    while ( l.head != NULL ){
+        deleteHead(l, i);
+    }
 }
 
 void showBool(bool val){
