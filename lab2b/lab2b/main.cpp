@@ -16,14 +16,14 @@ typedef struct List{
 
 void init(List& l){
     List *temp = new List;
-    temp->head = new Element;
-    temp->head->next = NULL;
-    temp->head->val = NULL;
+    temp->head = NULL;
+//    temp->head->next = NULL;
+//    temp->head->val = NULL;
     l = *temp;
 }
 
 void insertHead(List& l, int x){
-    Element *temp_head;
+    Element *temp_head = new Element;
     temp_head->next = l.head;
     temp_head->val = x;
     l.head = temp_head;
@@ -33,6 +33,7 @@ bool deleteHead(List& l, int &oldHead){
     if ( l.head == NULL ){
         return false;
     }
+    
     Element *tempHead = l.head;
     oldHead = l.head->val;
     l.head = l.head->next;
@@ -41,8 +42,13 @@ bool deleteHead(List& l, int &oldHead){
 }
 
 void insertTail(List& l, int x){
+    if ( l.head == NULL ){
+        insertHead(l, x);
+        return;
+    }
+    
     Element *temp_head = l.head;
-    Element *tail;
+    Element *tail = new Element;
     tail->next = NULL;
     tail->val = x;
     while ( temp_head->next != NULL )
@@ -54,6 +60,11 @@ bool deleteTail(List& l, int &oldTail){
     if ( l.head == NULL ){
         return false;
     }
+    if ( l.head->next == NULL){
+        deleteHead(l, oldTail);
+        return true;
+    }
+    
     Element *prev_elem = NULL,*temp_elem = l.head;
     while ( temp_elem->next != NULL ){
         prev_elem = temp_elem;
@@ -62,22 +73,23 @@ bool deleteTail(List& l, int &oldTail){
     prev_elem->next = NULL;
     oldTail = temp_elem->val;
     delete temp_elem;
-    return false;
+    return true;
 }
 
 int findPosOfValue(List& l, int value){
+    if ( l.head == NULL )
+        return -1;
     Element *temp_elem = l.head;
     int i = 0;
-    
     if ( l.head->next == NULL && l.head->val == value)
         return i;
     
     while ( temp_elem->next != NULL ){
-        temp_elem = temp_elem->next;
-        i++;
         if ( temp_elem->val == value){
             return i;
         }
+        temp_elem = temp_elem->next;
+        i++;
     }
     return -1;
 }
@@ -86,8 +98,10 @@ bool deleteValue(List& l, int value){
     Element *prev_elem = NULL;
     Element *temp_elem = l.head;
     
+    if ( l.head == NULL )
+        return false;
     
-    if ( l.head->next == NULL && l.head->val == value){
+    if ( l.head != NULL && l.head->next == NULL && l.head->val == value){
         int i;
         return deleteHead(l, i);
     }
@@ -108,6 +122,8 @@ bool deleteValue(List& l, int value){
 bool atPosition(List& l, int pos, int &value){
     if ( pos < 0 )
         return false;
+    if ( l.head == NULL )
+        return false;
     
     Element *temp_elem = l.head;
     for ( int i = 0; i < pos; i++){
@@ -127,15 +143,11 @@ void showListFromHead(List& l){
         return;
     }
     
-    if ( l.head->next == NULL ){
-        cout << l.head->val << "," << endl;
-        return;
-    }
-    
     Element *temp_elem = l.head;
-    while ( temp_elem->next != NULL ) {
-        cout << temp_elem->val << ",";
+    cout << temp_elem->val << ",";
+    while ( temp_elem->next != NULL ){
         temp_elem = temp_elem->next;
+        cout << temp_elem->val << ",";
     }
     cout << endl;
 }
@@ -162,7 +174,7 @@ bool isCommand(const string command,const char *mnemonic){
 int main(){
     string line;
     string command;
-    List *list;
+    List *list = NULL;
     int currentL=0;
     int value;
     cout << "START" << endl;
