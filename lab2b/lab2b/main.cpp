@@ -51,8 +51,9 @@ void insertTail(List& l, int x){
     Element *tail = new Element;
     tail->next = NULL;
     tail->val = x;
-    while ( temp_head->next != NULL )
+    while ( temp_head->next != NULL ){
         temp_head = temp_head->next;
+    }
     temp_head->next = tail;
 }
 
@@ -61,8 +62,7 @@ bool deleteTail(List& l, int &oldTail){
         return false;
     }
     if ( l.head->next == NULL){
-        deleteHead(l, oldTail);
-        return true;
+        return deleteHead(l, oldTail);
     }
     
     Element *prev_elem = NULL,*temp_elem = l.head;
@@ -77,34 +77,40 @@ bool deleteTail(List& l, int &oldTail){
 }
 
 int findPosOfValue(List& l, int value){
-    if ( l.head == NULL )
+    if ( l.head == NULL ){
         return -1;
+    }
+    
+    if ( l.head->val == value ){
+        return 0;
+    }
+    
     Element *temp_elem = l.head;
     int i = 0;
-    if ( l.head->next == NULL && l.head->val == value)
-        return i;
     
     while ( temp_elem->next != NULL ){
+        temp_elem = temp_elem->next;
+        i++;
         if ( temp_elem->val == value){
             return i;
         }
-        temp_elem = temp_elem->next;
-        i++;
     }
     return -1;
 }
 
 bool deleteValue(List& l, int value){
-    Element *prev_elem = NULL;
-    Element *temp_elem = l.head;
-    
-    if ( l.head == NULL )
+    if ( l.head == NULL ){
         return false;
-    
-    if ( l.head != NULL && l.head->next == NULL && l.head->val == value){
-        int i;
-        return deleteHead(l, i);
     }
+    
+    if ( l.head->val == value ){
+        int i;
+        deleteHead(l, i);
+        return true;
+    }
+    
+    Element *prev_elem = l.head;
+    Element *temp_elem = l.head;
     
     while ( temp_elem->next != NULL ){
         prev_elem = temp_elem;
@@ -120,12 +126,16 @@ bool deleteValue(List& l, int value){
 }
 
 bool atPosition(List& l, int pos, int &value){
-    if ( pos < 0 )
+    if ( pos < 0 ){
         return false;
-    if ( l.head == NULL )
+    }
+    
+    if ( l.head == NULL ){
         return false;
+    }
     
     Element *temp_elem = l.head;
+    
     for ( int i = 0; i < pos; i++){
         if ( temp_elem->next == NULL){
             return false;
