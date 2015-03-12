@@ -232,7 +232,7 @@ int main(){
             continue;
         }
         
-        if(isCommand(command,"SL"))
+        if(isCommand(command,"SH"))
         {
             showListFromHead(list[currentL]);
             continue;
@@ -306,3 +306,4 @@ int main(){
         cout << "wrong argument in test: " << command << endl;
     }
 }
+
