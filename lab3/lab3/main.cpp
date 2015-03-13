@@ -62,6 +62,7 @@ bool deleteHead(List2W& l, int &oldHead){
 void insertTail(List2W& l, int x){
     if ( isEmpty(l) ){
         insertHead( l, x );
+        return;
     }
     
     Element *temp = new Element;
