@@ -14,17 +14,12 @@ class List2W{
 public: Element *sentinel;
 };
 
-void nullSentinel ( List2W& l ){
-    l.sentinel->next = NULL;
-    l.sentinel->prev = NULL;
-    l.sentinel->key = 0;
-    l.sentinel->val = 0;
-}
 
 void init(List2W& l){
     List2W *temp = new List2W;
     temp->sentinel = new Element;
-    nullSentinel(*temp);
+    temp->sentinel->next = temp->sentinel;
+    temp->sentinel->prev = temp->sentinel;
     l = *temp;
 }
 
@@ -37,7 +32,7 @@ void showElemComma ( Element &elem ){
 }
 
 bool isEmpty (List2W& l){
-    return (l.sentinel->next == l.sentinel || l.sentinel->next == NULL );
+    return (l.sentinel->next == l.sentinel && l.sentinel->prev == l.sentinel );
 }
 
 void insertAfter ( Element& el1, Element& insert){
@@ -172,7 +167,6 @@ void clearList(List2W& l){
     while ( !isEmpty(l)){
         deleteElem(*l.sentinel->next);
     }
-    nullSentinel(l);
 }
 
 void addList(List2W& l1, List2W& l2){
@@ -182,13 +176,16 @@ void addList(List2W& l1, List2W& l2){
         return;
     
     Element *temp;
-    while (!isEmpty(l2)){
+    while ( true ){
         temp = l2.sentinel->next;
         l2.sentinel->next = l2.sentinel->next->next;
         insertElem(l1, *temp);
+        if ( l2.sentinel->next == l2.sentinel ){
+            l2.sentinel->prev = l2.sentinel;
+            return;
+        }
     }
     
-    nullSentinel(l2);
     
 }
 
