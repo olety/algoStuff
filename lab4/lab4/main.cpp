@@ -14,9 +14,17 @@ class List2W{
 public: Element *sentinel;
 };
 
+void nullSentinel ( List2W& l ){
+    l.sentinel->next = NULL;
+    l.sentinel->prev = NULL;
+    l.sentinel->key = NULL;
+    l.sentinel->val = NULL;
+}
+
 void init(List2W& l){
     List2W *temp = new List2W;
-    temp->sentinel = NULL;
+    temp->sentinel = new Element;
+    nullSentinel(*temp);
     l = *temp;
 }
 
@@ -25,22 +33,22 @@ void showElem ( Element &elem ){
 }
 
 void showElemComma ( Element &elem ){
-    cout << elem.key << "(" << elem.val << ")" << "," ;
+    cout << elem.key << "(" << elem.val << ")" << ",";
 }
 
 bool isEmpty (List2W& l){
-    return (l.sentinel = NULL);
+    return (l.sentinel->next == l.sentinel || l.sentinel->next == NULL );
 }
 
-void insertAfter ( Element& l1, Element& insert){
-    insert.next = l1.next;
-    insert.prev = &l1;
-    l1.next->prev = &insert;
-    l1.next = &insert;
+void insertAfter ( Element& el1, Element& insert){
+    insert.next = el1.next;
+    insert.prev = &el1;
+    el1.next->prev = &insert;
+    el1.next = &insert;
 }
 
-void insertBefore ( Element& l2, Element& insert){
-    insertAfter(*l2.prev, insert);
+void insertBefore ( Element& el2, Element& insert){
+    insertAfter(*el2.prev, insert);
 }
 
 void deleteElem ( Element& elem ){
@@ -60,14 +68,18 @@ void insertElem ( List2W& l, Element& elem){
         return;
     }
     
-    if ( l.sentinel->next->key <= elem.key){
+    if ( l.sentinel->next->key > elem.key){
         insertAfter(*l.sentinel, elem);
+        return;
     }
     
-    Element *temp = l.sentinel;
-    while ( temp->next != l.sentinel && temp->key <= elem.key ){
-        
-        temp = temp->next;
+    if ( l.sentinel->prev->key < elem.key){
+        insertBefore(*l.sentinel, elem);
+        return;
+    }
+    
+    Element *temp = l.sentinel->next;
+    while ( temp != l.sentinel && temp->key <= elem.key ){
         
         if ( temp->next->key > elem.key && temp->key < elem.key ){
             insertAfter(*temp, elem);
@@ -79,9 +91,10 @@ void insertElem ( List2W& l, Element& elem){
             insertAfter(*temp, elem);
             return;
         }
+        
+        temp = temp->next;
     }
     
-    insertBefore(*l.sentinel, elem);
     
 }
 
@@ -90,15 +103,16 @@ bool findKey(List2W& l, int key, Element& elem){
     if ( isEmpty(l))
         return false;
     
-    Element *temp = l.sentinel;
+    Element *temp = l.sentinel->next;
     
-    while ( temp->next != l.sentinel && temp->key <= temp->next->key ){
-        temp = temp->next;
+    while ( temp != l.sentinel && temp->key <= elem.key ){
+        
         if( temp->key == key )
         {
             elem = *temp;
             return true;
         }
+        temp = temp->next;
     }
     
     return false;
@@ -118,42 +132,47 @@ void removeAllKeys(List2W & l,int key){
         return;
     }
     
-    Element *temp = l.sentinel;
+    Element *temp = l.sentinel->next;
     Element *del;
-    while ( temp->next != l.sentinel && temp->next->key <= key ){
-    
-        temp = temp->next;
+    while ( temp != l.sentinel && temp->key <= key ){
         
         if( temp->key == key )
         {
             del = temp;
             deleteElem(*del);
         }
+        
+        temp = temp->next;
     }
 }
 
 void showListFromHead(List2W& l){
-    Element *temp = l.sentinel;
-    while ( temp->next != l.sentinel ){
-        temp = temp->next;
-        showElemComma(*temp);
-        cout << ",";
+    if ( !isEmpty(l) ){
+        Element *temp = l.sentinel->next;
+        while ( temp != l.sentinel ){
+            showElemComma(*temp);
+            temp = temp->next;
+        }
     }
+    cout << endl;
 }
 
 void showListFromTail(List2W& l){
-    Element *temp = l.sentinel;
-    while ( temp->prev != l.sentinel ){
-        showElemComma(*temp);
-        temp = temp->prev;
+    if ( !isEmpty(l) ){
+        Element *temp = l.sentinel->prev;
+        while ( temp != l.sentinel ){
+            showElemComma(*temp);
+            temp = temp->prev;
+        }
     }
+    cout << endl;
 }
 
 void clearList(List2W& l){
-    while ( !(l.sentinel->next == l.sentinel)){
+    while ( !isEmpty(l)){
         deleteElem(*l.sentinel->next);
     }
-    l.sentinel = NULL;
+    nullSentinel(l);
 }
 
 void addList(List2W& l1, List2W& l2){
@@ -162,11 +181,14 @@ void addList(List2W& l1, List2W& l2){
     if ( isEmpty(l2))
         return;
     
-    while (l2.sentinel->next != l2.sentinel){
-        insertElem(l1, *l2.sentinel->next);
+    Element *temp;
+    while (!isEmpty(l2)){
+        temp = l2.sentinel->next;
+        l2.sentinel->next = l2.sentinel->next->next;
+        insertElem(l1, *temp);
     }
     
-    l2.sentinel = NULL;
+    nullSentinel(l2);
     
 }
 
