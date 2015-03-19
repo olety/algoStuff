@@ -17,8 +17,8 @@ public: Element *sentinel;
 void nullSentinel ( List2W& l ){
     l.sentinel->next = NULL;
     l.sentinel->prev = NULL;
-    l.sentinel->key = NULL;
-    l.sentinel->val = NULL;
+    l.sentinel->key = 0;
+    l.sentinel->val = 0;
 }
 
 void init(List2W& l){
@@ -59,8 +59,8 @@ void deleteElem ( Element& elem ){
 
 void insertElem ( List2W& l, Element& elem){
     if ( isEmpty(l) ){
-        l.sentinel->key = NULL;
-        l.sentinel->val = NULL;
+        l.sentinel->key = 0;
+        l.sentinel->val = 0;
         l.sentinel->next = &elem;
         l.sentinel->prev = &elem;
         elem.next = l.sentinel;
