@@ -100,7 +100,7 @@ bool findKey(List2W& l, int key, Element& elem){
     
     Element *temp = l.sentinel->next;
     
-    while ( temp != l.sentinel && temp->key <= elem.key ){
+    while ( temp != l.sentinel && temp->key <= key ){
         
         if( temp->key == key )
         {
