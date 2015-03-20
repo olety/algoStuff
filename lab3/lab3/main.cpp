@@ -27,13 +27,14 @@ bool isEmpty (List2W& l){
 void insertHead(List2W& l, int x){
     Element *newHead = new Element;
     newHead->val = x;
-    newHead->prev = NULL;
-    newHead->next = l.head;
     if ( isEmpty(l) ){
         l.tail = newHead;
     } else {
         l.head->prev = newHead;
     }
+    //cycled
+    newHead->prev = l.tail;
+    newHead->next = l.head;
     l.head = newHead;
 }
 
@@ -50,7 +51,7 @@ bool deleteHead(List2W& l, int &oldHead){
         l.head = NULL;
         l.tail = NULL;
     } else {
-        temp->next->prev = NULL;
+        temp->next->prev = l.tail;
         l.head = temp->next;
     }
     
@@ -115,19 +116,23 @@ void removeAllValue(List2W & l,int value){
     
     Element *temp = l.head, *del;
     int i;
+    
+    if ( l.head->val == value ){
+        temp = temp->next;
+        deleteHead(l, i);
+    }
+    
     while ( temp!= NULL) {
         if ( temp->val == value ){
             
-            if ( l.head == temp ){
-                deleteHead(l, i);
-                continue;
-            } else if ( l.tail == temp ) {
+            if ( l.tail == temp ) {
+                temp = temp->next;
                 deleteTail(l, i);
                 return;
             }
             
             del = temp;
-            temp = del->next;
+            temp = temp->next;
             del->next->prev = del->prev;
             del->prev->next = del->next;
             
