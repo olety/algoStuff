@@ -87,7 +87,7 @@ void merge( int array[], int p, int q, int r){
 
 void mergeSortArr ( int arr[], int p, int r){
     if ( r > p ){
-        int q = (int) floor((r+p)/2);
+        int q = (r+p)/2;
         mergeSortArr(arr, p, q);
         mergeSortArr(arr, q+1, r);
         merge(arr,p,q,r);
@@ -113,7 +113,7 @@ int main(){
     string line;
     string command;
     int value;
-    cout << "START" << endl;
+    //cout << "START" << endl;
     while(true){
         getline(cin,line);
         std::stringstream stream(line);
@@ -125,7 +125,7 @@ int main(){
         }
         
         // copy line on output with exclamation mark
-        cout << "!" << line << endl;;
+        //cout << "!" << line << endl;;
         
         // change to uppercase
         command[0]=toupper(command[0]);
