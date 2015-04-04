@@ -2,6 +2,9 @@
 #include <string>
 #include <sstream>
 #include <math.h>
+#include <sys/time.h>
+#include <chrono>
+
 using namespace std;
 void swap( int&a, int&b ){
     int temp = a;
@@ -9,6 +12,20 @@ void swap( int&a, int&b ){
     b = temp;
 };
 
+class Timer
+{
+public:
+    Timer() : beg_(clock_::now()) {}
+    void reset() { beg_ = clock_::now(); }
+    double elapsed() const {
+        return std::chrono::duration_cast<second_>
+        (clock_::now() - beg_).count(); }
+    
+private:
+    typedef std::chrono::high_resolution_clock clock_;
+    typedef std::chrono::duration<double, std::ratio<1> > second_;
+    std::chrono::time_point<clock_> beg_;
+};
 
 void showArray( int arr[], int size ){
     for (int i = 0; i < size; i++){
@@ -28,7 +45,7 @@ void insertSort( int arr[], int size ){
             arr[k] = arr[k+1];
         }
         arr[j] = elem;
-        showArray(arr, size);
+       // showArray(arr, size);
     }
 };
 
@@ -39,7 +56,7 @@ void bubbleSort( int arr[], int size ){
                 swap(arr[i-1],arr[i]);
             }
         }
-        showArray(arr, size);
+      //  showArray(arr, size);
     }
 };
 
@@ -96,7 +113,7 @@ void mergeSortArr ( int arr[], int p, int r){
 
 void mergeSort( int arr[], int size ){
     mergeSortArr(arr,0,size-1);
-    showArray(arr, size);
+   // showArray(arr, size);
 };
 void showBool(bool val){
     if(val)
@@ -109,7 +126,7 @@ bool isCommand(const string command,const char *mnemonic){
     return command==mnemonic;
 }
 
-int main(){
+int main2(){
     string line;
     string command;
     int value;
@@ -178,3 +195,205 @@ int main(){
     }
     return 0;
 }
+
+void parseIn ( FILE &in, int arr[]){
+    char string[2048];
+    int i = 0;
+    while ( fscanf(&in, "%s", string) != EOF ){
+        arr[i] = stoi(string);
+        i++;
+    }
+}
+
+void outdata ( FILE &out, char*s, double time ){
+    cout << "printing data " << s << endl;
+    fprintf( &out, "execution time of %s is %f.\n", s, time);
+}
+
+int main ( void ){
+    FILE *out = fopen("res.txt", "w+");
+    FILE *in10 = fopen("10.txt", "r");
+    FILE *in100 = fopen("100.txt", "r");
+    FILE *in1k = fopen("1k.txt", "r");
+    FILE *in10k = fopen("10k.txt", "r");
+    FILE *in100k = fopen("100k.txt", "r");
+    //FILE *inmil = fopen("mil.txt", "r");
+    
+    int *arr10b = new int[10];
+    int *arr10i = new int[10];
+    int * arr10m = new int[10];
+    
+    int *arr100b = new int[100];
+    int *arr100i = new int[100];
+    int * arr100m = new int[100];
+    
+    int *arr1kb = new int[1000];
+    int *arr1ki = new int[1000];
+    int * arr1km = new int[1000];
+    
+    int *arr10kb = new int[10000];
+    int *arr10ki = new int[10000];
+    int * arr10km = new int[10000];
+    
+    int *arr100kb = new int[100000];
+    int *arr100ki = new int[100000];
+    int * arr100km = new int[100000];
+    
+//    int *arrmilb = new int[1000000];
+//    int *arrmili = new int[1000000];
+//    int *arrmilm = new int[1000000];
+    
+    Timer tmr;
+    double t = 0;
+    
+//    parsing files
+    
+    parseIn(*in10, arr10b);
+    parseIn(*in10, arr10i);
+    parseIn(*in10, arr10m);
+    
+    parseIn(*in100, arr100b);
+    parseIn(*in100, arr100i);
+    parseIn(*in100, arr100m);
+    
+    parseIn(*in1k, arr1kb);
+    parseIn(*in1k, arr1ki);
+    parseIn(*in1k, arr1km);
+    
+    parseIn(*in10k, arr10kb);
+    parseIn(*in10k, arr10ki);
+    parseIn(*in10k, arr10km);
+    
+    parseIn(*in100k, arr100kb);
+    parseIn(*in100k, arr100ki);
+    parseIn(*in100k, arr100km);
+    
+//    parseIn(*inmil, arrmilb);
+//    parseIn(*inmil, arrmili);
+//    parseIn(*inmil, arrmilm);
+    
+    
+    //      bubble sort
+    
+    tmr.reset();
+    bubbleSort(arr10b, 10);
+    t = tmr.elapsed();
+    outdata( *out,"bsort 10",t);
+    
+    tmr.reset();
+    bubbleSort(arr100b, 100);
+    t = tmr.elapsed();
+    outdata( *out,"bsort 100",t);
+    
+    tmr.reset();
+    bubbleSort(arr1kb, 1000);
+    t = tmr.elapsed();
+    outdata( *out,"bsort 1k",t);
+    
+    tmr.reset();
+    bubbleSort(arr10kb, 10000);
+    t = tmr.elapsed();
+    outdata( *out,"bsort 10k",t);
+    
+    tmr.reset();
+    bubbleSort(arr100kb, 100000);
+    t = tmr.elapsed();
+    outdata( *out,"bsort 100k",t);
+    
+//    tmr.reset();
+//    bubbleSort(arrmilb, 1000000);
+//    t = tmr.elapsed();
+//    cout << "exec time of bsort 1mil " <<   << endl;
+    
+//    insert sort
+    
+    tmr.reset();
+    insertSort(arr10i, 10);
+    t = tmr.elapsed();
+    outdata( *out, "insort 10", t );
+    
+    tmr.reset();
+    insertSort(arr100i, 100);
+    t = tmr.elapsed();
+    outdata( *out, "insort 100", t );
+    
+    tmr.reset();
+    insertSort(arr1ki, 1000);
+    t = tmr.elapsed();
+    outdata( *out, "insort 1k", t );
+    
+    tmr.reset();
+    insertSort(arr10ki, 10000);
+    t = tmr.elapsed();
+    outdata( *out, "insort 10k", t );
+    
+    tmr.reset();
+    insertSort(arr100ki, 100000);
+    t = tmr.elapsed();
+    outdata( *out, "insort 100k", t );
+    
+//    tmr.reset();
+//    insertSort(arrmili, 1000000);
+//    t = tmr.elapsed();
+//    cout << "exec time of insort 1mil " <<   << endl;
+    
+//    merge sort
+    
+    tmr.reset();
+    mergeSort(arr10m, 10);
+    t = tmr.elapsed();
+    outdata( *out, "msort 10", t );
+    
+    tmr.reset();
+    mergeSort(arr100m, 100);
+    t = tmr.elapsed();
+    outdata( *out, "msort 100", t );
+    
+    tmr.reset();
+    mergeSort(arr1km, 1000);
+    t = tmr.elapsed();
+    outdata( *out, "msort 1k", t );
+    
+    tmr.reset();
+    mergeSort(arr10km, 10000);
+    t = tmr.elapsed();
+    outdata( *out, "msort 10k", t );
+    
+    tmr.reset();
+    mergeSort(arr100km, 100000);
+    t = tmr.elapsed();
+    outdata( *out, "msort 100k", t );
+    
+//    tmr.reset();
+//    mergeSort(arrmilm, 1000000);
+//    t = tmr.elapsed();
+//    outdata(out, "msort 1mil",t);
+    
+    
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
