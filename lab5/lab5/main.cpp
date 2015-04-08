@@ -205,9 +205,16 @@ void parseIn ( FILE &in, int arr[]){
     }
 }
 
-void outdata ( FILE &out, char*s, double time ){
+void outdata ( FILE &out, const char*s, double time ){
     cout << "printing data " << s << endl;
-    fprintf( &out, "execution time of %s is %f.\n", s, time);
+    printf( "execution time of %s is %f.\n", s, time);
+}
+
+void bsort( FILE &out, Timer tmr, int arr[], int size, const char* s){
+    tmr.reset();
+    bubbleSort(arr, size);
+    double t = tmr.elapsed();
+    outdata( out,"bsort 10",t);
 }
 
 int main ( void ){
@@ -217,7 +224,7 @@ int main ( void ){
     FILE *in1k = fopen("1k.txt", "r");
     FILE *in10k = fopen("10k.txt", "r");
     FILE *in100k = fopen("100k.txt", "r");
-    //FILE *inmil = fopen("mil.txt", "r");
+    FILE *inmil = fopen("mil.txt", "r");
     
     int *arr10b = new int[10];
     int *arr10i = new int[10];
@@ -241,7 +248,7 @@ int main ( void ){
     
 //    int *arrmilb = new int[1000000];
 //    int *arrmili = new int[1000000];
-//    int *arrmilm = new int[1000000];
+      int *arrmilm = new int[1000000];
     
     Timer tmr;
     double t = 0;
@@ -270,7 +277,7 @@ int main ( void ){
     
 //    parseIn(*inmil, arrmilb);
 //    parseIn(*inmil, arrmili);
-//    parseIn(*inmil, arrmilm);
+      parseIn(*inmil, arrmilm);
     
     
     //      bubble sort
@@ -364,10 +371,10 @@ int main ( void ){
     t = tmr.elapsed();
     outdata( *out, "msort 100k", t );
     
-//    tmr.reset();
-//    mergeSort(arrmilm, 1000000);
-//    t = tmr.elapsed();
-//    outdata(out, "msort 1mil",t);
+    tmr.reset();
+    mergeSort(arrmilm, 1000000);
+    t = tmr.elapsed();
+    outdata(*out, "msort 1mil",t);
     
     
     return 0;
