@@ -100,6 +100,9 @@ void merge( int array[], int p, int q, int r){
         j++;
     }
     
+    delete lowHalf;
+    delete highHalf;
+    
 }
 
 void mergeSortArr ( int arr[], int p, int r){
