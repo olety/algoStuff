@@ -1,39 +1,16 @@
 /*
  Merge Sort Iteartive
- a | a | a | a | a | a | a | a | a
- m       m       m       m
- a a | a a | a a | a a | a
- m           m
- a a a a | a a a a | a
- m
- a a a a a a a a | a
- m
- b | b | b
- m
- b b | b
- m
+ 0 | 1 | 2 | 3 | 4 | 5 [ 6
+   m       m       m
  
- c | c | c | c
- m       m
- c c | c c
- m
+ 0 1 | 2 3 [ 4 5 [ 6
+     m
  
- d | d | d | d | d
- m       m
- d d | d d | d
- m
- d d d d | d
- m
+ 0 1 2 3 | 4 5 [ 6
+         m
  
- 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13
-   m       m       m       m       m        m         m
- 0 1 | 2 3 | 4 5 | 6 7 | 8 9 | 10 11 | 12 13
-     m           m           m
- 0 1 2 3 | 4 5 6 7 | 8 9 10 11 | 12 13
- m
- 0 1 2 3 4 5 6 7 | 8 9 10 11 12 | 13 14
- m
- 
+ 0 1 2 3 4 5 | 6
+             m
  */
 #include <iostream>
 #include <string>
