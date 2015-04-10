@@ -139,7 +139,7 @@ void iterative( int arr[], int size ){
         }
     }
     delete[] excludes;
-    showArray(arr, size);
+  //  showArray(arr, size);
 }
     
 void mergeSortArr ( int arr[], int p, int r){

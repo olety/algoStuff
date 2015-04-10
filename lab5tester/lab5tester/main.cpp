@@ -14,9 +14,11 @@ int main(int argc, const char * argv[]) {
     int i;
     cout << "№ of elements to generate" << endl;
     cin >> i;
+    int k = 0;
     FILE *out = fopen("out.txt", "w+");
     for ( int j = 0; j < i; j++){
-        int k = rand()/10000;
+        //int k = rand()/10000;
+        k++;
         fprintf(out, "%d\n", k);
     }
     
