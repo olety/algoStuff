@@ -1,5 +1,5 @@
 /*
- Merge Sort Iteartive
+ Merge Sort Iterative
  0 | 1 | 2 | 3 | 4 | 5 [ 6
    m       m       m
  
@@ -65,8 +65,8 @@ void merge( int array[], int p, int q, int r){
         k++;
         j++;
     }
-    delete lowHalf;
-    delete highHalf;
+    delete[] lowHalf;
+    delete[] highHalf;
     
 }
 
@@ -101,7 +101,7 @@ int power ( int base, int to ){
 
 void iterative( int arr[], int size ){
     int sorted_ind = 0, ex = 0, i, j_prev, pwr, size_s = size;
-    int *excludes = new int;
+    int *excludes = new int[size];
     for( i = 0; i < size; i++){
         excludes[i] = -1;
     }
@@ -138,6 +138,7 @@ void iterative( int arr[], int size ){
             sorted_ind += pow(2,i);
         }
     }
+    delete[] excludes;
     showArray(arr, size);
 }
     
@@ -173,6 +174,7 @@ int main(){
     string line;
     string command;
     int value;
+    int* arr = nullptr;
     //cout << "START" << endl;
     while(true){
         getline(cin,line);
@@ -200,14 +202,14 @@ int main(){
         stream >> value;
         
         if(isCommand(command,"MI")){
-            int* arr = new int[value];
+            arr = new int[value];
             for (int i = 0; i < value; i++){
                 cin >> arr[i];
             }
             cout << "mergeSortIter" << endl;
             showArray(arr, value);
             mergeSort(arr, value);
-            delete arr;
+            delete[] arr;
             continue;
         }
         cout << "wrong argument in test: " << command << endl;
