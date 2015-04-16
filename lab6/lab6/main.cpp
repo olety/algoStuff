@@ -128,46 +128,26 @@ int power ( int base, int to ){
 
 
 void iterative( int arr[], int size ){
-    int sorted_ind = 0, ex = 0, i, j_prev, pwr, size_s = size;
-    int *excludes = new int[size];
-    for( i = 0; i < size; i++){
-        excludes[i] = -1;
-    }
-    i=0;
-    while ( size_s != 1 ){
-        if ( size_s %2 != 0 )
-            excludes[i] = 1;
-        else
-            excludes[i] = 0;
-        size_s /= 2;
-        i++;
-    }
-    ex = i;
-    for ( i = 1; i < calcSteps(size); i++){
+    int ex = 0, i, j=0, j_prev=0, pwr;
+     for ( i = 1; i < calcSteps(size); i++){
         pwr = power(2, i);
+        if ( (size-ex)%pwr != 0 ){
+            ex += power(2,i-1);
+        }
         j_prev = 0;
-        for ( int j = pwr-1; j < size; j+= pwr ){
+        for (  j = pwr-1; j < size; j+= pwr ){
             merge(arr, j_prev, (j+j_prev)/2, j);
-//            cout << j_prev << (j+j_prev)/2 << j << endl;
-//            showArray(arr, size);
             j_prev = j+1;
         }
+         if ( ex > power(2,i-1) ){
+             merge(arr, size-ex, size-ex+power(2,i-1)-1, size-1);
+         }
+         showArray(arr, size);
+    }
+    if ( ex != 0 ){
+        merge(arr, 0, j_prev-1, size-1);
         showArray(arr, size);
     }
-    
-    sorted_ind = pow(2,ex)-1;
-    
-    for ( i = ex-1; i >= 0; i--)
-    {
-        if ( excludes[i] ){
-            merge(arr, 0, sorted_ind, sorted_ind + pow(2,i));
-//            cout << 0 << sorted_ind << sorted_ind+pow(2, i) << endl;
-            showArray(arr, size);
-            sorted_ind += pow(2,i);
-        }
-    }
-    delete[] excludes;
-  //  showArray(arr, size);
 }
     
 void mergeSortArr ( int arr[], int p, int r){
