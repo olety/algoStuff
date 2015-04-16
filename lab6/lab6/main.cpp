@@ -70,6 +70,34 @@ void merge( int array[], int p, int q, int r){
     
 }
 
+void insertSort( int arr[], int size ){
+    int i,j,k,elem;
+    for ( i = size-2; i >=0; i--){
+        j = size-1;
+        elem = arr[i];
+        while ( j>i && elem <= arr[j] )
+            j--;
+        for ( k = i; k < j; k ++){
+            arr[k] = arr[k+1];
+        }
+        arr[j] = elem;
+        showArray(arr, size);
+    }
+};
+
+void bubbleSort( int arr[], int size ){
+    for ( int j = 0; j < size - 1; j++ ){
+        for ( int i = size - 1; i > j; i-- ){
+            if ( arr[i] < arr[i-1] ){
+                swap(arr[i-1],arr[i]);
+            }
+        }
+        showArray(arr, size);
+    }
+};
+
+
+
 int isPow2 ( int n ){
     int k = 2;
     while ( k <= n ){
@@ -92,7 +120,7 @@ int calcSteps ( int n ){
 
 int power ( int base, int to ){
     if ( to < 0 )
-        exit(EXIT_FAILURE);
+        return -1;
     if ( to == 0 )
         return 1;
     return base*power(base,to-1);
@@ -152,6 +180,12 @@ void mergeSortArr ( int arr[], int p, int r){
 }
 
 void mergeSort( int arr[], int size ){
+    mergeSortArr(arr,0,size-1);
+    //iterative(arr, size);
+    showArray(arr, size);
+};
+
+void mergeSortI( int arr[], int size ){
     //mergeSortArr(arr,0,size-1);
     iterative(arr, size);
     //showArray(arr, size);
@@ -174,7 +208,7 @@ int main(){
     string line;
     string command;
     int value;
-    int* arr = nullptr;
+    int* arr = NULL;
     //cout << "START" << endl;
     while(true){
         getline(cin,line);
@@ -200,6 +234,41 @@ int main(){
         }
         //one-arg command
         stream >> value;
+        if(isCommand(command,"BS")){
+            arr = new int[value];
+            for (int i = 0; i < value; i++){
+                cin >> arr[i];
+            }
+            cout << "bubbleSort" << endl;
+            showArray(arr, value);
+            bubbleSort(arr, value);
+            delete[] arr;
+            continue;
+        }
+        
+        if(isCommand(command,"IS")){
+            arr = new int[value];
+            for (int i = 0; i < value; i++){
+                cin >> arr[i];
+            }
+            cout << "insertSort" << endl;
+            showArray(arr, value);
+            insertSort(arr, value);
+            delete[] arr;
+            continue;
+        }
+        
+        if(isCommand(command,"MS")){
+            arr = new int[value];
+            for (int i = 0; i < value; i++){
+                cin >> arr[i];
+            }
+            cout << "mergeSort" << endl;
+            showArray(arr, value);
+            mergeSort(arr, value);
+            delete[] arr;
+            continue;
+        }
         
         if(isCommand(command,"MI")){
             arr = new int[value];
@@ -208,7 +277,7 @@ int main(){
             }
             cout << "mergeSortIter" << endl;
             showArray(arr, value);
-            mergeSort(arr, value);
+            mergeSortI(arr, value);
             delete[] arr;
             continue;
         }
