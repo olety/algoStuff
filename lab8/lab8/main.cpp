@@ -7,6 +7,11 @@
 //
 
 #include <iostream>
+#include <fstream> 
+#include <sstream>
+#include <string>
+#include <vector>
+
 using namespace std;
 
 struct Element{
@@ -276,8 +281,93 @@ void showBool(bool val){
 void showInt ( int a ){
     cout << a << endl;
 }
+
+int getNextWord ( char **line, char* word ){
+    if ( **line == '\0' ){
+        return -1;
+    }
+    
+    char a = **line;
+    int n = 0;
+    
+    if ( !isalpha(a) ){
+        while ( !isalpha(a) && ( a != '\0') ) {
+            n++;
+            a = *( *(line) + n );
+        }
+        *line += n;
+        return 0;
+    }
+        
+    while ( isalpha(a) ){
+        a = tolower(a);
+        *(word+n) = a;
+        n++;
+        a = *( *(line) + n );
+    }
+   
+    *(word+n) = '\0';
+    
+    *line += n;
+    
+    return 1;
+};
+
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    ifstream fs;
+    std::vector<string> words;
+    char *line = new char[100000];
+    std::string line1;
+    char *word = new char[512];
+    char *temp;
+    int i = 0;
+    fs.open("big.txt", fstream::in);
+    if ( fs.is_open() ){
+        while ( std::getline(fs, line1) ){
+            copy(line1.begin(),line1.end(), line);
+            line[line1.size()] = '\0';
+            temp = line;
+            while ( (i = getNextWord(&temp, word)) != -1){
+                if ( i != 0){
+                   // std::cout << word << endl;
+                    words.resize(words.size()+1);
+                    words[words.size()-1] = std::string(word);
+                }
+            }
+        }
+    }
+    
+//    cout << "ending execution" << endl;
+    delete[] line;
+    delete[] word;
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
