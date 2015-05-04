@@ -1,14 +1,12 @@
 //
 //  main.cpp
-//  lab7
+//  lab8
+//
+//  Created by Oleksii Kyrylchuk on 5/4/15.
+//  Copyright (c) 2015 olety. All rights reserved.
 //
 
 #include <iostream>
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
-#include <sstream>
-
 using namespace std;
 
 struct Element{
@@ -17,10 +15,10 @@ struct Element{
 };
 
 class BST {
-
+    
 public:
     Element *root;
-
+    
 };
 
 void init( BST &tree ){
@@ -278,158 +276,8 @@ void showBool(bool val){
 void showInt ( int a ){
     cout << a << endl;
 }
-
-bool isCommand(const string command,const char *mnemonic){
-    return command==mnemonic;
+int main(int argc, const char * argv[]) {
+    // insert code here...
+    std::cout << "Hello, World!\n";
+    return 0;
 }
-
-int main(){
-    string line;
-    string command;
-    BST *tree = NULL;
-    int currentT=0;
-    bool retBool;
-    int retInt = 0;
-    Element *elem = new Element;
-    int value1=0, value2=0;
-    cout << "START" << endl;
-    while(true){
-        getline(cin,line);
-        std::stringstream stream(line);
-        stream >> command;
-        if(line=="" || command[0]=='#')
-        {
-            // ignore empty line and comment
-            continue;
-        }
-        
-        // copy line on output with exclamation mark
-        cout << "!" << line << endl;;
-        
-        // change to uppercase
-        command[0]=toupper(command[0]);
-        command[1]=toupper(command[1]);
-        
-        if(isCommand(command,"HA")){
-            cout << "END OF EXECUTION" << endl;
-            break;
-        }
-        
-        
-        // zero-argument command
-        
-        
-        if(isCommand(command,"IN"))
-        {
-            init(tree[currentT]);
-            continue;
-        }
-        
-        if(isCommand(command,"SI"))
-        {
-            showInorder(tree[currentT]);
-            continue;
-        }
-        
-        if(isCommand(command,"SP"))
-        {
-            showPreorder(tree[currentT]);
-            continue;
-        }
-        
-        if(isCommand(command,"SQ"))
-        {
-            showPostorder(tree[currentT]);
-            continue;
-        }
-        
-        
-        if(isCommand(command,"CL"))
-        {
-            clear(tree[currentT]);
-            continue;
-        }
-        
-        if(isCommand(command,"NN"))
-        {
-            retInt = numberOfNodes(tree[currentT]);
-            showInt(retInt);
-            continue;
-        }
-        
-        if(isCommand(command,"HE"))
-        {
-            retInt = height(tree[currentT]);
-            showInt(retInt);
-            continue;
-        }
-        
-        // read next argument, one int value
-        stream >> value1;
-        
-        if(isCommand(command,"FK"))
-        {
-            retBool = findKey(tree[currentT], value1, *elem);
-            if ( retBool ){
-                showElement(*elem, true, false);
-            } else {
-                showBool(retBool);
-            }
-            continue;
-        }
-        
-        if(isCommand(command,"RK"))
-        {
-            retBool = removeKey(tree[currentT], value1, *elem);
-            if ( retBool ){
-                showElement(*elem, true, false);
-            } else {
-                showBool(retBool);
-            }
-            continue;
-        }
-        
-        if(isCommand(command,"GO"))
-        {
-            tree = new BST[value1];
-            continue;
-        }
-        
-        if(isCommand(command,"CH"))
-        {
-            currentT = value1;
-            continue;
-        }
-        
-        //read 2nd argument
-        stream >> value2;
-        
-        if(isCommand(command,"IE"))
-        {
-            retBool = insertElem(tree[currentT], value1, value2);
-            showBool(retBool);
-            continue;
-        }
-        
-        cout << "wrong argument in test: " << command << endl;
-    }
-    delete elem;
-    delete [] tree;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
