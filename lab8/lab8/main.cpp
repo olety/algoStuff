@@ -5,7 +5,6 @@
 //  Created by Oleksii Kyrylchuk on 5/4/15.
 //  Copyright (c) 2015 olety. All rights reserved.
 //
-
 #include <iostream>
 #include <fstream> 
 #include <sstream>
@@ -16,34 +15,110 @@ using namespace std;
 
 struct Element{
     Element *parent, *left, *right;
-    int key,value;
+    int key;
+    std::vector<string> words;
+};
+struct Element1{
+    Element1 *parent, *left, *right;
+    long int key;
+    std::vector<string> words;
 };
 
 class BST {
+private:
+    Element *root;
+    Element* findWord ( Element* node, std::string word );
+    Element* findSuccessor ( Element *node);
+    Element* initElem( int k, std::string word );
+    void addWord( Element* elem, std::string word );
+    void clear( Element* node );
+    void removeWord ( std::string word );
+    void removeWord ( Element* node, std::string word );
+    void outWords ( std::vector<std::string> words );
+    bool wordOcc ( std::vector<std::string> strings, std::string word );
+    bool removeNode ( Element* node );
     
 public:
-    Element *root;
+    
+    BST();
+    ~BST();
+    void insert( std::string word );
+    void outMax ();
     
 };
 
-void init( BST &tree ){
-    BST *temp = new BST;
-    temp->root = NULL;
-    tree = *temp;
+BST::BST(){
+    this->root = NULL;
 }
 
-Element* initElem ( int key, int val ){
-    Element* elem = new Element;
-    elem->left = NULL;
-    elem->right = NULL;
-    elem->parent = NULL;
-    elem->key = key;
-    elem->value = val;
+BST::~BST(){
+    this->clear( this->root );
+    delete this;
+}
+void BST::outWords( std::vector<std::string> words ){
+    for ( int i = 0; i < words.size(); i++ ){
+        std::cout << words[i] << std::endl;
+    }
+}
+void BST::outMax(){
+    Element *temp = this->root;
+    while ( temp->right != nullptr){
+        temp = temp->right;
+    }
+    std::cout << "Most common words : ";
+    outWords( temp->words );
+}
+
+void BST::clear( Element* node ){
+    if ( node != NULL ){
+        clear( node->left );
+        clear( node->right );
+        node->left = NULL;
+        node->right = NULL;
+        node->parent = NULL;
+        delete node;
+    }
+}
+
+void BST::addWord(Element *elem, std::string word){
+    if ( elem == nullptr )
+        return;
+    
+    elem->words.resize(elem->words.size()+1);
+    elem->words[elem->words.size()-1] = word;
+    
+}
+
+bool BST::wordOcc( std::vector<std::string> strings , std::string word ){
+    for ( int i = 0; i < strings.size(); i++ ){
+        if ( strings[i] == word ){
+            return true;
+        }
+    }
+    return false;
+}
+
+Element* BST::initElem( int k, std::string word){
+    Element *elem = new Element;
+    elem->words.resize(1);
+    elem->key = k;
+    elem->words[0] = word;
+    elem->left = nullptr;
+    elem->right = nullptr;
+    elem->parent = nullptr;
     return elem;
 }
 
-bool insertElem ( BST &tree, int k , int val ){
-    Element *temp = tree.root , *temp_prev = NULL;
+void BST::insert( std::string word ){
+    //search for a word, then key = 1 if it's not found
+    Element* temp2 = this->findWord(this->root, word);
+    int k = 1;
+    if ( temp2 != nullptr ){
+        k = (temp2)->key + 1;
+        this->removeWord(temp2,word);
+    }
+    Element *temp = this->root , *temp_prev = nullptr;
+    
     while ( temp != NULL ){
         temp_prev = temp;
         if ( k < temp->key ){
@@ -51,111 +126,77 @@ bool insertElem ( BST &tree, int k , int val ){
         } else if ( k > temp->key){
             temp = temp->right;
         } else {
-            return false;
+            //k is the same
+            break;
         }
     }
-    Element *insert = initElem( k , val );
-    insert->parent = temp_prev;
-    if ( temp_prev == NULL ){
-        tree.root = insert;
-    } else if ( insert->key > temp_prev->key ) {
-        temp_prev->right = insert;
-    } else {
-        temp_prev->left = insert;
+    
+    if ( temp_prev == temp && this->root != nullptr ){
+        this->addWord(this->root, word);
     }
     
-    return true;
-}
-bool insertElem ( BST &tree, Element Elem ){
-    return insertElem(tree, Elem.key, Elem.value );
-}
-
-void showElement ( int key, int val ){
-    cout << key << "(" << val << ")" << ",";
-}
-
-void showElement ( int key, int val, bool comma ){
-    cout << key << "(" << val << ")";
-    if ( comma ){
-        cout << ",";
-    }
-}
-
-void showElement ( Element elem ){
-    showElement(elem.key, elem.value);
-}
-
-void showElement ( Element elem , bool newl, bool comma ){
-    showElement(elem.key, elem.value, comma);
-    if ( newl ){
-        cout << endl;
-    }
-}
-
-
-void showPreorder( Element *node ){
-    if ( node != NULL ){
-        showElement( *node );
-        showPreorder( node->left );
-        showPreorder( node->right );
-    }
-}
-
-void showPreorder( BST &tree ){
-    showPreorder(tree.root);
-    cout << endl;
-}
-
-
-void showInorder( Element *node ){
-    if ( node != NULL ){
-        showPreorder( node->left );
-        showElement( *node );
-        showPreorder( node->right );
-    }
-}
-
-void showInorder( BST &tree ){
-    showInorder(tree.root);
-    cout << endl;
-}
-
-void showPostorder( Element *node ){
-    if ( node != NULL ){
-        showPostorder( node->left );
-        showPostorder( node->right );
-        showElement( *node );
-    }
-}
-
-void showPostorder( BST &tree ){
-    showPostorder(tree.root);
-    cout << endl;
-}
-
-Element* findKey ( Element *node, int key ) {
-    if ( node == NULL ){
-        return NULL;
-    }
-    if ( node->key == key ){
-        return node;
-    } else if ( node->key > key ){ // node.key > key, key is in the left subtree
-        return findKey(node->left, key);
+    Element *insert = initElem( k , word );
+    insert->parent = temp_prev;
+    
+    if ( this->root == nullptr ){
+        this->root = insert;
+    } else if ( insert->key > temp_prev->key ) {
+        temp_prev->right = insert;
+    } else if ( insert->key < temp_prev->key){
+        temp_prev->left = insert;
     } else {
-        return findKey(node->right, key);
+        this->addWord(temp_prev, word);
     }
 }
 
-bool findKey ( BST &tree, int key,  Element& elem ) {
-    Element* temp;
-    if ( (temp = findKey(tree.root, key)) != NULL ){
-        elem = *temp;
-        return true;
+Element* BST::findWord( Element* node, std::string word ){
+    if ( node == nullptr ){
+        return nullptr;
     }
-    return false;
+    
+    if ( wordOcc(node->words, word) ){
+        return node;
+    }
+    
+    Element *temp1, *temp2;
+    
+    if ( (temp1 = findWord(node->left, word)) != nullptr){
+        return temp1;
+    } else {
+        return (temp2 = findWord(node->right, word));
+    }
+    
 }
 
-Element *findSuccessor ( Element *node ){
+void BST::removeWord( std::string word ){
+    Element *temp = findWord(this->root, word);
+    if ( temp->words.size() == 1 ){
+        removeNode(temp);
+        return;
+    }
+    for ( int i = 0; i < temp->words.size(); i++ ){
+        if ( temp->words[i] == word ){
+            temp->words.erase(temp->words.begin()+i);
+            return;
+        }
+    }
+    
+}
+void BST::removeWord( Element* node, std::string word ){
+    if ( node->words.size() == 1 ){
+        removeNode(node);
+        return;
+    }
+    for ( int i = 0; i < node->words.size(); i++ ){
+        if ( node->words[i] == word ){
+            node->words.erase(node->words.begin()+i);
+            return;
+        }
+    }
+    
+}
+
+Element* BST::findSuccessor ( Element *node ){
     Element *temp = node->right;
     
     while ( temp->left != NULL ){
@@ -165,7 +206,7 @@ Element *findSuccessor ( Element *node ){
     return temp;
 }
 
-bool removeNode ( BST &tree, Element *node , Element* deletedNode) {
+bool BST::removeNode ( Element *node ){
     
     if ( node == NULL )
         return false;
@@ -175,7 +216,7 @@ bool removeNode ( BST &tree, Element *node , Element* deletedNode) {
     if ( node->left == NULL || node->right == NULL ){
         temp = node;
     } else {
-        temp = findSuccessor(node);
+        temp = this->findSuccessor(node);
     }
     
     if ( temp->left == NULL ){
@@ -189,38 +230,48 @@ bool removeNode ( BST &tree, Element *node , Element* deletedNode) {
     }
     
     if ( temp->parent == NULL ){
-        tree.root = temp2;
+        this->root = temp2;
     } else if ( temp == temp->parent->left ){
         temp->parent->left = temp2;
     } else {
         temp->parent->right = temp2;
     }
     
-    deletedNode = node;
-    
     if ( temp != node ){
         node->key = temp->key;
-        node->value = temp->value;
+        node->words = temp->words;
     }
     
     return true;
+    
 }
 
+class BST1 {
+private:
+    Element1 *root;
+    Element1 *initElem( int k, std::string word );
+    void clear( Element1* node );
+    long int genKey ( const char* word );
+    
+public:
+    
+    BST1();
+    ~BST1();
+    void insert( std::string word );
+    void outMax ();
+    
+};
 
-bool removeKey ( BST &tree, int key, Element& elem ) {
-    Element *temp = findKey(tree.root, key);
-    Element *temp2;
-    if ( temp != NULL ){
-        removeNode(tree, temp, temp2);
-        elem.key = temp2->key;
-        elem.value = temp2->value;
-        delete temp2;
-        return true;
-    }
-    return false;
+BST1::BST1(){
+    this->root = NULL;
 }
 
-void clear ( Element* node ){
+BST1::~BST1(){
+    this->clear( this->root );
+    delete this;
+}
+
+void BST1::clear( Element1* node ){
     if ( node != NULL ){
         clear( node->left );
         clear( node->right );
@@ -231,72 +282,77 @@ void clear ( Element* node ){
     }
 }
 
-void clear ( BST &tree ){
-    clear(tree.root);
-    tree.root = NULL;
+Element1* BST1::initElem( int k, std::string word){
+    Element1 *elem = new Element1;
+    elem->words.resize(1);
+    elem->key = k;
+    elem->words[0] = word;
+    elem->left = nullptr;
+    elem->right = nullptr;
+    elem->parent = nullptr;
+    return elem;
 }
 
-void numberOfNodes ( Element *node, int* beforeCnt ){
-    if ( node != NULL ){
-        (*beforeCnt)++;
-        numberOfNodes( node->left, beforeCnt );
-        numberOfNodes( node->right, beforeCnt );
+long int BST1::genKey( const char* word ){
+    char temp = *word;
+    long int k;
+    int i = 0;
+    while ( temp != '\0' ){
+        k += temp;
+        temp = *(word+i);
+        i++;
+    }
+    return k;
+}
+
+void BST1::insert( std::string word ){
+    long int k = this->genKey(word.c_str());
+    Element1 *temp = this->root , *temp_prev = nullptr;
+    
+    while ( temp != NULL ){
+        temp_prev = temp;
+        if ( k < temp->key ){
+            temp = temp->left;
+        } else if ( k > temp->key){
+            temp = temp->right;
+        } else {
+            //k is the same
+            break;
+        }
+    }
+    
+    if ( temp_prev == temp && this->root != nullptr ){
+    }
+    
+    Element1 *insert = initElem( k , word );
+    insert->parent = temp_prev;
+    
+    if ( this->root == nullptr ){
+        this->root = insert;
+    } else if ( insert->key > temp_prev->key ) {
+        temp_prev->right = insert;
+    } else if ( insert->key < temp_prev->key){
+        temp_prev->left = insert;
+    } else {
     }
 }
 
-int numberOfNodes ( BST &tree ){
-    int p = 0;
-    numberOfNodes(tree.root, &p);
-    return p;
-}
-
-int max ( int a , int b ){
-    if ( a > b ){
-        return a;
-    }
-    return b;
-}
-
-int height ( Element *node ){
-    if ( node == NULL ){
-        return 0;
-    }
-    int leftHeight = height(node->left);
-    int rightHeight = height(node->right);
-    return max(leftHeight,rightHeight)+1;
-}
-
-
-int height ( BST &tree ){
-    return height(tree.root);
-}
-
-void showBool(bool val){
-    if(val)
-        cout << "true" << endl;
-    else
-        cout << "false" << endl;
-}
-
-void showInt ( int a ){
-    cout << a << endl;
-}
-
-int getNextWord ( char **line, char* word ){
-    if ( **line == '\0' ){
-        return -1;
+bool getNextWord ( char **line, char* word ){
+    if ( **line == '\0' || **line == '\n' ){
+        return false;
     }
     
     char a = **line;
     int n = 0;
     
     if ( !isalpha(a) ){
-        while ( !isalpha(a) && ( a != '\0') ) {
-            n++;
-            a = *( *(line) + n );
+        while ( !isalpha(a) ) {
+            (*line)++;
+            a = **line;
+            if ( **line == '\0' || **line == '\n' ) {
+                return false;
+            }
         }
-        *line += n;
-        return 0;
     }
         
     while ( isalpha(a) ){
@@ -310,35 +366,44 @@ int getNextWord ( char **line, char* word ){
     
     *line += n;
     
-    return 1;
+    return true;
 };
 
 int main(int argc, const char * argv[]) {
-    ifstream fs;
+    const int LENLINE = 1024;
+    FILE *in = fopen("big.txt","r");
     std::vector<string> words;
-    char *line = new char[100000];
-    std::string line1;
+    char *line = new char[LENLINE];
     char *word = new char[512];
-    char *temp;
-    int i = 0;
-    fs.open("big.txt", fstream::in);
-    if ( fs.is_open() ){
-        while ( std::getline(fs, line1) ){
-            copy(line1.begin(),line1.end(), line);
-            line[line1.size()] = '\0';
-            temp = line;
-            while ( (i = getNextWord(&temp, word)) != -1){
-                if ( i != 0){
-                   // std::cout << word << endl;
-                    words.resize(words.size()+1);
-                    words[words.size()-1] = std::string(word);
-                }
-            }
+    char* temp = line;
+//    BST *tree = new BST();
+    BST1 *tree = new BST1();
+    int i;
+    std::cout << "Started processing text" << std::endl;
+    while ( fgets(line, LENLINE-1, in) != NULL ){
+        while ( getNextWord(&line, word)){
+               // std::cout << word << endl;
+                words.resize(words.size()+1);
+                words[words.size()-1] = std::string(word);
+        }
+        line = temp;
+    }
+    std::cout << "Ended processing text" << std::endl;
+    // Inefficient BST here
+   /*
+    std::cout << "Started writing into BST" << std::endl;
+    for ( i = 0; i < words.size(); i++ ){
+       // std::cout << "inserting " << words[i] << std::endl;
+        tree->insert(words[i]);
+        if ( i == 10000  ){
+            std::cout << "inserted " << i << " elements" << std::endl;
+            tree->outMax();
         }
     }
-    
-//    cout << "ending execution" << endl;
-    delete[] line;
+    std::cout << "Ended writing into BST" << std::endl;
+    tree->outMax();
+    */
+    delete[] temp;
     delete[] word;
     return 0;
 }
