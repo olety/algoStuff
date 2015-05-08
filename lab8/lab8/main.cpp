@@ -10,6 +10,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <map>
+#include <unordered_map>
 
 using namespace std;
 
@@ -18,6 +20,24 @@ struct Element{
     int key;
     std::vector<std::string> words;
 };
+
+class timer {
+private:
+    unsigned long begTime;
+public:
+    void start() {
+        begTime = clock();
+    }
+    
+    unsigned long elapsedTime() {
+        return ((unsigned long) clock() - begTime) / CLOCKS_PER_SEC;
+    }
+    
+    bool isTimeout(unsigned long seconds) {
+        return seconds >= elapsedTime();
+    }
+};
+
 
 class BST {
 private:
@@ -256,13 +276,15 @@ private:
     bool removeNode ( Element1 *node );
     Element1* findSuccessor ( Element1 *node );
     int findMaxVal( Element1 *node );
-    void outWordValue ( Element1 *node, int val );
+    void outWordDelValue ( Element1 *node, int val );
+    void outAll( Element1 *node );
 public:
     
     BST1();
     ~BST1();
     void insert( std::string word );
     void outMax ();
+    void outElems ();
     
 };
 
@@ -383,7 +405,7 @@ int BST1::findMaxVal( Element1* node ){
     maxLeft = findMaxVal( node->left );
     maxRight = findMaxVal( node->right );
     
-    if ( node->value >= maxRight && node->value >= maxRight ){
+    if ( node->value >= maxRight && node->value >= maxLeft ){
         return node->value;
     }   else if ( maxRight >= maxLeft ) {
         return maxRight;
@@ -393,21 +415,39 @@ int BST1::findMaxVal( Element1* node ){
     
 }
 
-void BST1::outWordValue( Element1 *node, int val){
+void BST1::outWordDelValue( Element1 *node, int val){
     if ( node == nullptr )
         return;
-    this->outWordValue(node->left, val);
-    this->outWordValue(node->right, val);
+    this->outWordDelValue(node->left, val);
+    this->outWordDelValue(node->right, val);
     if ( node->value == val ){
-        std::cout << node->word << ", ";
+        std::cout << node->word << " ( " << val << " )"<< ", " ;
+        node->value = 0;
     }
 }
-
+void BST1::outAll(Element1 *node){
+    if ( node != nullptr ){
+        
+        cout << node->word << " ( " << node->value << " ) " << std::endl;
+        outAll(node->left);
+        outAll(node->right);
+    }
+    
+}
 void BST1::outMax() {
-    int max = findMaxVal(this->root);
+    int max;
     std::cout << "Words with highest occurences : " ;
-    this->outWordValue( this->root, max );
+    for ( int i = 0; i < 10; i++ )
+    {
+        max = findMaxVal(this->root);
+        this->outWordDelValue( this->root, max );
+        max = 0;
+    }
     std::cout << std::endl;
+}
+
+void BST1::outElems() {
+    outAll(this->root);
 }
 
 bool getNextWord ( char **line, char* word ){
@@ -441,6 +481,63 @@ bool getNextWord ( char **line, char* word ){
     
     return true;
 };
+void hasht ( std::vector<std::string> words ){
+    std::unordered_map<std::string, int> hash;
+    std::unordered_map<std::string, int>::iterator it;
+    for ( std::vector<std::string>::const_iterator i = words.begin(); i != words.end(); i++){
+        
+        if ( (it = hash.find(*i)) != hash.end() ){
+            it->second++;
+            continue;
+        }
+        hash[*i] = 1;
+    }
+    
+    int findmax;
+    for ( int k = 0; k < 10; k++){
+        findmax = 0;
+        for ( it = hash.begin(); it != hash.end(); it++){
+            if ( it->second > findmax )
+                findmax = it->second;
+        }
+        for ( it = hash.begin(); it != hash.end(); it++){
+            if ( it->second == findmax ){
+                std::cout << it->first << " ( " << it->second << " ), " ;
+                it->second = -1;
+            }
+        }
+    }
+    std::cout << std::endl;
+
+}
+void rbtree ( std::vector<std::string> words ){
+    std::map<std::string, int> tree;
+    std::map<std::string, int>::iterator it;
+    for ( std::vector<std::string>::const_iterator i = words.begin(); i != words.end(); i++){
+        
+        if ( (it = tree.find(*i)) != tree.end() ){
+            it->second++;
+            continue;
+        }
+        tree[*i] = 1;
+    }
+    
+    int findmax;
+    for ( int k = 0; k < 10; k++){
+        findmax = 0;
+        for ( it = tree.begin(); it != tree.end(); it++){
+            if ( it->second > findmax )
+                findmax = it->second;
+        }
+        for ( it = tree.begin(); it != tree.end(); it++){
+            if ( it->second == findmax ){
+                std::cout << it->first << " ( " << it->second << " ), " ;
+                it->second = -1;
+            }
+        }
+    }
+    std::cout << std::endl;
+}
 
 int main(int argc, const char * argv[]) {
     srand(NULL);
@@ -450,6 +547,7 @@ int main(int argc, const char * argv[]) {
     char *line = new char[LENLINE];
     char *word = new char[512];
     char* temp = line;
+    timer *time = new timer();
 //    BST *tree = new BST();
     BST1 *tree1 = new BST1();
     int i;
@@ -477,18 +575,26 @@ int main(int argc, const char * argv[]) {
      std::cout << "Ended writing into BST" << std::endl;
      tree->outMax();
      */
+    time->start();
     std::cout << "Started writing into BST1" << std::endl;
     for ( i = 0; i < words.size(); i++ ){
         // std::cout << "inserting " << words[i] << std::endl;
         tree1->insert(words[i]);
         if ( i % 10000 == 0  ){
-            std::cout << "inserted " << i << " elements" << std::endl;
-            tree1->outMax();
+         //   std::cout << "inserted " << i << " elements" << std::endl;
+          //  tree1->outMax();
         }
     }
+    //tree1->outElems();
     std::cout << "Ended writing into BST1" << std::endl;
     tree1->outMax();
-    
+    std::cout << "Efficient BST took " << time->elapsedTime() << " seconds. " << std::endl;
+    time->start();
+    rbtree(words);
+    std::cout << "Red-Black tree took " << time->elapsedTime() << " seconds. " << std::endl;
+    time->start();
+    hasht(words);
+    std::cout << "Hashtable took " << time->elapsedTime() << " seconds. " << std::endl;
     delete[] temp;
     delete[] word;
     return 0;
