@@ -21,23 +21,21 @@ struct Element{
     std::vector<std::string> words;
 };
 
-class timer {
-private:
-    unsigned long begTime;
-public:
-    void start() {
-        begTime = clock();
-    }
-    
-    unsigned long elapsedTime() {
-        return ((unsigned long) clock() - begTime) / CLOCKS_PER_SEC;
-    }
-    
-    bool isTimeout(unsigned long seconds) {
-        return seconds >= elapsedTime();
-    }
-};
 
+class Timer
+{
+public:
+    Timer() : beg_(clock_::now()) {}
+    void reset() { beg_ = clock_::now(); }
+    double elapsed() const {
+        return chrono::duration_cast<second_>
+        (clock_::now() - beg_).count(); }
+    
+private:
+    typedef chrono::high_resolution_clock clock_;
+    typedef chrono::duration<double, std::ratio<1> > second_;
+    chrono::time_point<clock_> beg_;
+};
 
 class BST {
 private:
@@ -547,7 +545,7 @@ int main(int argc, const char * argv[]) {
     char *line = new char[LENLINE];
     char *word = new char[512];
     char* temp = line;
-    timer *time = new timer();
+    Timer *time = new Timer();
 //    BST *tree = new BST();
     BST1 *tree1 = new BST1();
     int i;
@@ -575,7 +573,8 @@ int main(int argc, const char * argv[]) {
      std::cout << "Ended writing into BST" << std::endl;
      tree->outMax();
      */
-    time->start();
+    cout << time->elapsed() << endl;
+    time->reset();
     std::cout << "Started writing into BST1" << std::endl;
     for ( i = 0; i < words.size(); i++ ){
         // std::cout << "inserting " << words[i] << std::endl;
@@ -588,13 +587,13 @@ int main(int argc, const char * argv[]) {
     //tree1->outElems();
     std::cout << "Ended writing into BST1" << std::endl;
     tree1->outMax();
-    std::cout << "Efficient BST took " << time->elapsedTime() << " seconds. " << std::endl;
-    time->start();
+    std::cout << "Efficient BST took " << time->elapsed() << " seconds. " << std::endl;
+    time->reset();
     rbtree(words);
-    std::cout << "Red-Black tree took " << time->elapsedTime() << " seconds. " << std::endl;
-    time->start();
+    std::cout << "Red-Black tree took " << time->elapsed() << " seconds. " << std::endl;
+    time->reset();
     hasht(words);
-    std::cout << "Hashtable took " << time->elapsedTime() << " seconds. " << std::endl;
+    std::cout << "Hashtable took " << time->elapsed() << " seconds. " << std::endl;
     delete[] temp;
     delete[] word;
     return 0;
