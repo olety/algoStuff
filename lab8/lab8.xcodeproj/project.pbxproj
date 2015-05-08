@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		778682011AF7E2B400D2DDE0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 778682001AF7E2B400D2DDE0 /* main.cpp */; };
+		77B8FDA31AFD44DF005F0ED7 /* InefficientInsertBST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77B8FDA11AFD44DF005F0ED7 /* InefficientInsertBST.cpp */; };
+		77B8FDA61AFD45A6005F0ED7 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77B8FDA41AFD45A6005F0ED7 /* timer.cpp */; };
+		77B8FDA91AFD4947005F0ED7 /* EfficientBST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77B8FDA71AFD4947005F0ED7 /* EfficientBST.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,12 @@
 /* Begin PBXFileReference section */
 		778681FD1AF7E2B400D2DDE0 /* lab8 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lab8; sourceTree = BUILT_PRODUCTS_DIR; };
 		778682001AF7E2B400D2DDE0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		77B8FDA11AFD44DF005F0ED7 /* InefficientInsertBST.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InefficientInsertBST.cpp; sourceTree = "<group>"; };
+		77B8FDA21AFD44DF005F0ED7 /* InefficientInsertBST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InefficientInsertBST.h; sourceTree = "<group>"; };
+		77B8FDA41AFD45A6005F0ED7 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../../timer/timer.cpp; sourceTree = "<group>"; };
+		77B8FDA51AFD45A6005F0ED7 /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = ../../timer/timer.h; sourceTree = "<group>"; };
+		77B8FDA71AFD4947005F0ED7 /* EfficientBST.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EfficientBST.cpp; sourceTree = "<group>"; };
+		77B8FDA81AFD4947005F0ED7 /* EfficientBST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EfficientBST.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +66,13 @@
 		778681FF1AF7E2B400D2DDE0 /* lab8 */ = {
 			isa = PBXGroup;
 			children = (
+				77B8FDA11AFD44DF005F0ED7 /* InefficientInsertBST.cpp */,
+				77B8FDA21AFD44DF005F0ED7 /* InefficientInsertBST.h */,
 				778682001AF7E2B400D2DDE0 /* main.cpp */,
+				77B8FDA71AFD4947005F0ED7 /* EfficientBST.cpp */,
+				77B8FDA81AFD4947005F0ED7 /* EfficientBST.h */,
+				77B8FDA41AFD45A6005F0ED7 /* timer.cpp */,
+				77B8FDA51AFD45A6005F0ED7 /* timer.h */,
 			);
 			path = lab8;
 			sourceTree = "<group>";
@@ -119,6 +134,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				778682011AF7E2B400D2DDE0 /* main.cpp in Sources */,
+				77B8FDA31AFD44DF005F0ED7 /* InefficientInsertBST.cpp in Sources */,
+				77B8FDA61AFD45A6005F0ED7 /* timer.cpp in Sources */,
+				77B8FDA91AFD4947005F0ED7 /* EfficientBST.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +253,7 @@
 				778682061AF7E2B400D2DDE0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
