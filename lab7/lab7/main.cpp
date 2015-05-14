@@ -247,6 +247,12 @@ int numberOfNodes ( BST &tree ){
     return p;
 }
 
+int numberOfNodes ( Element* node ){
+    if ( node == nullptr )
+        return 0;
+    return (numberOfNodes(node->left)+numberOfNodes(node->right)+1);
+}
+
 int max ( int a , int b ){
     if ( a > b ){
         return a;

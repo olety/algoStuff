@@ -62,14 +62,16 @@ void bubbleSort( int arr[], int size ){
 
 void merge( int array[], int p, int q, int r){
     int* lowHalf = new int[q-p+1];
-    int* highHalf = new int[r-(q+1)+1];
+    int* highHalf = new int[r-(q+1)+1]; // r-q-1+1 = r-q
     
     int k = p;
     int i;
     int j;
+    
     for (i = 0; k <= q; i++, k++) {
         lowHalf[i] = array[k];
     }
+    
     for (j = 0; k <= r; j++, k++) {
         highHalf[j] = array[k];
     }
@@ -191,6 +193,7 @@ int main2(){
             cout << "mergeSort" << endl;
             showArray(arr, value);
             mergeSort(arr, value);
+            showArray(arr, value);
             delete arr;
             continue;
         }
