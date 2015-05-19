@@ -211,7 +211,7 @@ int main(){
         }
         
         // copy line on output with exclamation mark
-        cout << "!" << line << endl;;
+        cout << "!" << line << endl;
         
         // change to uppercase
         command[0]=toupper(command[0]);
