@@ -1,10 +1,10 @@
 /*
-  main.cpp
-  lab10
-
-  Created by Oleksii Kyrylchuk on 5/19/15.
-  Copyright (c) 2015 olety. All rights reserved.
-
+ main.cpp
+ lab10
+ 
+ Created by Oleksii Kyrylchuk on 5/19/15.
+ Copyright (c) 2015 olety. All rights reserved.
+ 
  
  Implement graph representation as an adjacency matrix.
  In the tasks vertices a numbered from 0. Any graph is without loops (a loop is an edge form a vertex to this same vertex)
@@ -47,14 +47,14 @@ Graph::~Graph (){
 }
 
 void Graph::insertEdge( int node1, int node2, double weight){
-    if ( node1 == node2 || node1 >= this->nodeMatrix.size() || node2 >= this->nodeMatrix.size() )
+    if ( node1 == node2 )
         return;
     this->nodeMatrix[node1][node2] = weight;
-//    this->nodeMatrix[node2][node1] = weight;
+    //    this->nodeMatrix[node2][node1] = weight;
 }
 
 bool Graph::findEdge( int node1, int node2, double &weight){
-    if ( this->nodeMatrix[node1][node2] == DBL_MAX || node1 == node2 )
+    if ( this->nodeMatrix[node1][node2] == DBL_MAX )
         return false;
     weight = this->nodeMatrix[node1][node2];
     return true;
@@ -94,7 +94,7 @@ int main(){
     std::string line,command;
     int currentG = 0, i, value1, value2, k;
     double value3;
-//    bool retBool = false;
+    //    bool retBool = false;
     std::vector<Graph*> g;
     std::cout << "START" << std::endl;
     while(true){
@@ -160,7 +160,7 @@ int main(){
         }
         
         if(isCommand(command,"FE")){ //findEdge
-            if ( !(g[currentG]->findEdge(value1, value2, value3))){ //should it return val, if node1==node2?
+            if ( !(g[currentG]->findEdge(value1, value2, value3))){
                 std::cout << "false" << std::endl;
                 continue;
             }
