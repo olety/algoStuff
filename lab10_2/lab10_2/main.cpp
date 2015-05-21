@@ -6,7 +6,7 @@
  Copyright (c) 2015 olety. All rights reserved.
  
  
- Implement graph representation as an adjacency matrix.
+ Implement graph representation as an array of lists.
  In the tasks vertices a numbered from 0. Any graph is without loops (a loop is an edge form a vertex to this same vertex)
  
  */
@@ -18,69 +18,151 @@
 
 class Graph {
 private:
-    std::vector<std::vector<double> > nodeMatrix;
+    struct ElementL{
+        ElementL *prev;
+        ElementL *next;
+        double weight;
+        int nodeNum;
+    };
+
+    struct List {
+        ElementL *head;
+    };
+    ElementL *initElem ( int nodeNum, double weight, ElementL *prev, ElementL *next );
+    int nodeCnt;
+    std::vector< List* > nodeArray;
+    
 public:
     Graph( int nodes );
     ~Graph();
     void insertEdge( int node1, int node2, double weight );
     bool findEdge( int node1, int node2, double &weight );
+    bool findEdge( int node1, int node2 );
     void showAsMatrix();
     void showAsArray();
 };
 
 Graph::Graph ( int nodes ){
-    this->nodeMatrix.resize((size_t) nodes);
-    for ( int i = 0; i < nodes; i++ ){
-        this->nodeMatrix[i].resize((size_t) nodes);
-        for ( int j = 0; j < nodes; j++ ){
-            if ( i == j ){
-                this->nodeMatrix[i][j] = 0;
-                continue;
-            }
-            this->nodeMatrix[i][j] = DBL_MAX;
-        }
+    this->nodeArray.resize((size_t) nodes);
+    this->nodeCnt = nodes;
+    for ( int i = 0; i < this->nodeCnt; i++ ){
+        this->nodeArray[i] = new List;
+        this->nodeArray[i]->head = initElem(i, 0., NULL, NULL);
     }
 }
 
 Graph::~Graph (){
-    
+    ElementL *temp,*temp_prev;
+    for ( int i = 0; i < this->nodeCnt; i++ ){
+        temp = nodeArray[i]->head;
+        while ( temp != NULL ){
+            temp_prev = temp;
+            temp = temp->next;
+            delete temp_prev;
+        }
+        delete nodeArray[i];
+    }
+}
+
+Graph::ElementL *Graph::initElem(int nodeNum, double weight, Graph::ElementL *prev, Graph::ElementL *next ){
+    Graph::ElementL *temp = new ElementL;
+    temp->nodeNum = nodeNum;
+    temp->weight = weight;
+    temp->next = next;
+    temp->prev = prev;
+    if ( (temp->next) )
+        temp->next->prev = temp;
+    if ( (temp->prev) )
+        temp->prev->next = temp;
+    return temp;
 }
 
 void Graph::insertEdge( int node1, int node2, double weight){
-    if ( node1 == node2 )
+    if ( node1 == node2 || node1 >= this->nodeCnt || node2 >= this->nodeCnt )
         return;
-    this->nodeMatrix[node1][node2] = weight;
-    //    this->nodeMatrix[node2][node1] = weight;
+    
+    double a;
+    ElementL *temp = this->nodeArray[node1]->head->next, *temp_prev = this->nodeArray[node1]->head;
+    
+    while ( temp != NULL && temp->nodeNum > node2 ){
+        temp_prev = temp;
+        temp = temp->next;
+    }
+    
+    if ( temp == NULL ){
+        initElem(node2, weight, temp_prev, temp);
+        return;
+    } else if ( node2 > temp->nodeNum ){
+        initElem(node2, weight, temp, temp->next);
+        return;
+    }
+    
+    temp->weight = weight;
+    
+    
+}
+
+bool Graph::findEdge( int node1, int node2 ){
+    ElementL *temp = this->nodeArray[node1]->head;
+    
+    if ( node1 == node2 || temp->next->nodeNum > node2 )
+        return false;
+    
+    do {
+        if ( temp->nodeNum == node2 ){
+            return true;
+        }
+        temp = temp->next;
+    } while (temp != NULL);
+    
+    return false;
 }
 
 bool Graph::findEdge( int node1, int node2, double &weight){
-    if ( this->nodeMatrix[node1][node2] == DBL_MAX )
+    ElementL *temp = this->nodeArray[node1]->head;
+    
+    if ( node1 == node2 || temp->next->nodeNum > node2 )
         return false;
-    weight = this->nodeMatrix[node1][node2];
-    return true;
+    
+    do {
+        if ( temp->nodeNum == node2 ){
+            weight = temp->weight;
+            return true;
+        }
+        temp = temp->next;
+    } while (temp != NULL);
+    
+    return false;
 }
 
 void Graph::showAsMatrix(){
-    for ( int i = 0; i < (int) this->nodeMatrix.size(); i++ ){
-        for ( int j = 0; j < (int) this->nodeMatrix.size(); j++ ){
-            if ( this->nodeMatrix[i][j] == DBL_MAX ){
-                std::cout << "-," ;
-                continue;
+    ElementL *temp;
+    for ( int i = 0; i < this->nodeCnt; i++ ){
+        temp = this->nodeArray[i]->head->next;
+        for (int j = 0; j < this->nodeCnt; j++ ){
+            if ( temp == NULL || j < temp->nodeNum ){
+                if ( i == j ){
+                    std::cout << "0,";
+                    continue;
+                }
+                std::cout << "-,";
+            } else {
+                std::cout << temp->weight << ",";
+                temp = temp->next;
             }
-            std::cout << this->nodeMatrix[i][j] << ",";
         }
         std::cout << std::endl;
     }
 }
 
 void Graph::showAsArray(){
-    for ( int i = 0; i < (int) this->nodeMatrix.size(); i++ ){
+    ElementL *temp;
+    for ( int i = 0; i < (int) this->nodeArray.size(); i++ ){
         std::cout << i << ":";
-        for ( int j = 0; j < (int) this->nodeMatrix.size(); j++ ){
-            if ( this->nodeMatrix[i][j] == DBL_MAX || i == j){
-                continue;
-            }
-            std::cout << j << "(" << this->nodeMatrix[i][j] << ")" << ",";
+        temp = this->nodeArray[i]->head->next;
+        while ( temp != NULL ){
+            std::cout << temp->nodeNum << "(" << temp->weight << ")" << ",";
+            temp = temp->next;
         }
         std::cout << std::endl;
     }
