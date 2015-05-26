@@ -178,7 +178,7 @@ int main(){
     double value3;
     //    bool retBool = false;
     std::vector<Graph*> g;
-    std::cout << "START" << std::endl;
+   // std::cout << "START" << std::endl;
     while(true){
         getline(std::cin,line);
         std::stringstream stream(line);
@@ -190,7 +190,7 @@ int main(){
         }
         
         // copy line on output with exclamation mark
-        std::cout << "!" << line << std::endl;
+    //    std::cout << "!" << line << std::endl;
         
         // change to uppercase
         command[0]=toupper(command[0]);
