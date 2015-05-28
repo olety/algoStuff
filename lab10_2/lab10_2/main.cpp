@@ -13,160 +13,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <float.h>
-#include <vector>
-
-class Graph {
-private:
-    struct ElementL{
-        ElementL *prev;
-        ElementL *next;
-        double weight;
-        int nodeNum;
-    };
-
-    struct List {
-        ElementL *head;
-    };
-    ElementL *initElem ( int nodeNum, double weight, ElementL *prev, ElementL *next );
-    int nodeCnt;
-    std::vector< List* > nodeArray;
-    
-public:
-    Graph( int nodes );
-    ~Graph();
-    void insertEdge( int node1, int node2, double weight );
-    bool findEdge( int node1, int node2, double &weight );
-    bool findEdge( int node1, int node2 );
-    void showAsMatrix();
-    void showAsArray();
-};
-
-Graph::Graph ( int nodes ){
-    this->nodeArray.resize((size_t) nodes);
-    this->nodeCnt = nodes;
-    for ( int i = 0; i < this->nodeCnt; i++ ){
-        this->nodeArray[i] = new List;
-        this->nodeArray[i]->head = initElem(i, 0., NULL, NULL);
-    }
-}
-
-Graph::~Graph (){
-    ElementL *temp,*temp_prev;
-    for ( int i = 0; i < this->nodeCnt; i++ ){
-        temp = nodeArray[i]->head;
-        while ( temp != NULL ){
-            temp_prev = temp;
-            temp = temp->next;
-            delete temp_prev;
-        }
-        delete nodeArray[i];
-    }
-}
-
-Graph::ElementL *Graph::initElem(int nodeNum, double weight, Graph::ElementL *prev, Graph::ElementL *next ){
-    Graph::ElementL *temp = new ElementL;
-    temp->nodeNum = nodeNum;
-    temp->weight = weight;
-    temp->next = next;
-    temp->prev = prev;
-    if ( (temp->next) )
-        temp->next->prev = temp;
-    if ( (temp->prev) )
-        temp->prev->next = temp;
-    return temp;
-}
-
-void Graph::insertEdge( int node1, int node2, double weight){
-    if ( node1 == node2 || node1 >= this->nodeCnt || node2 >= this->nodeCnt )
-        return;
-    
-    double a;
-    ElementL *temp = this->nodeArray[node1]->head->next, *temp_prev = this->nodeArray[node1]->head;
-    
-    while ( temp != NULL && temp->nodeNum > node2 ){
-        temp_prev = temp;
-        temp = temp->next;
-    }
-    
-    if ( temp == NULL ){
-        initElem(node2, weight, temp_prev, temp);
-        return;
-    } else if ( node2 > temp->nodeNum ){
-        initElem(node2, weight, temp, temp->next);
-        return;
-    }
-    
-    temp->weight = weight;
-    
-    
-}
-
-bool Graph::findEdge( int node1, int node2 ){
-    ElementL *temp = this->nodeArray[node1]->head;
-    
-    if ( node1 == node2 || temp->next->nodeNum > node2 )
-        return false;
-    
-    do {
-        if ( temp->nodeNum == node2 ){
-            return true;
-        }
-        temp = temp->next;
-    } while (temp != NULL);
-    
-    return false;
-}
-
-bool Graph::findEdge( int node1, int node2, double &weight){
-    ElementL *temp = this->nodeArray[node1]->head;
-    
-    if ( node1 == node2 || temp->next->nodeNum > node2 )
-        return false;
-    
-    do {
-        if ( temp->nodeNum == node2 ){
-            weight = temp->weight;
-            return true;
-        }
-        temp = temp->next;
-    } while (temp != NULL);
-    
-    return false;
-}
-
-void Graph::showAsMatrix(){
-    ElementL *temp;
-    for ( int i = 0; i < this->nodeCnt; i++ ){
-        temp = this->nodeArray[i]->head->next;
-        for (int j = 0; j < this->nodeCnt; j++ ){
-            if ( temp == NULL || j < temp->nodeNum ){
-                if ( i == j ){
-                    std::cout << "0,";
-                    continue;
-                }
-                std::cout << "-,";
-            } else {
-                std::cout << temp->weight << ",";
-                temp = temp->next;
-            }
-        }
-        std::cout << std::endl;
-    }
-}
-
-void Graph::showAsArray(){
-    ElementL *temp;
-    for ( int i = 0; i < (int) this->nodeArray.size(); i++ ){
-        std::cout << i << ":";
-        temp = this->nodeArray[i]->head->next;
-        while ( temp != NULL ){
-            std::cout << temp->nodeNum << "(" << temp->weight << ")" << ",";
-            temp = temp->next;
-        }
-        std::cout << std::endl;
-    }
-}
+#include "lgraph.h"
 
 bool isCommand(const std::string command,const char *mnemonic){
     return command==mnemonic;
@@ -177,8 +24,8 @@ int main(){
     int currentG = 0, i, value1, value2, k;
     double value3;
     //    bool retBool = false;
-    std::vector<Graph*> g;
-   // std::cout << "START" << std::endl;
+    std::vector<lGraph*> g;
+    std::cout << "START" << std::endl;
     while(true){
         getline(std::cin,line);
         std::stringstream stream(line);
@@ -190,7 +37,7 @@ int main(){
         }
         
         // copy line on output with exclamation mark
-    //    std::cout << "!" << line << std::endl;
+        std::cout << "!" << line << std::endl;
         
         // change to uppercase
         command[0]=toupper(command[0]);
@@ -230,7 +77,7 @@ int main(){
         stream >> value2;
         
         if(isCommand(command,"LG")){ //loadGraph, value1 = nodes, value2 = edges
-            g[currentG] = new Graph( value1 );
+            g[currentG] = new lGraph( value1 );
             k = value2;
             for ( i = 0; i < k; i++ ){
                 getline(std::cin,line);

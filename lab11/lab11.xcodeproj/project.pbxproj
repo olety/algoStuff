@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		77310F641B1491F9004E2393 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77310F631B1491F9004E2393 /* main.cpp */; };
+		77D066841B174E1000CA0470 /* mgraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77D066821B174E1000CA0470 /* mgraph.cpp */; };
+		77D066871B174E6500CA0470 /* sgraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77D066851B174E6500CA0470 /* sgraph.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,10 @@
 /* Begin PBXFileReference section */
 		77310F601B1491F9004E2393 /* lab11 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lab11; sourceTree = BUILT_PRODUCTS_DIR; };
 		77310F631B1491F9004E2393 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		77D066821B174E1000CA0470 /* mgraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mgraph.cpp; sourceTree = "<group>"; };
+		77D066831B174E1000CA0470 /* mgraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mgraph.h; sourceTree = "<group>"; };
+		77D066851B174E6500CA0470 /* sgraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sgraph.cpp; path = lab11/sGraph/sgraph.cpp; sourceTree = SOURCE_ROOT; };
+		77D066861B174E6500CA0470 /* sgraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sgraph.h; path = lab11/sGraph/sgraph.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +63,30 @@
 		77310F621B1491F9004E2393 /* lab11 */ = {
 			isa = PBXGroup;
 			children = (
+				77D066811B174E1000CA0470 /* graph */,
 				77310F631B1491F9004E2393 /* main.cpp */,
 			);
 			path = lab11;
+			sourceTree = "<group>";
+		};
+		77D066811B174E1000CA0470 /* graph */ = {
+			isa = PBXGroup;
+			children = (
+				77D066851B174E6500CA0470 /* sgraph.cpp */,
+				77D066861B174E6500CA0470 /* sgraph.h */,
+				77D066891B174ED000CA0470 /* mgraph */,
+			);
+			name = graph;
+			path = ../../mGraph;
+			sourceTree = "<group>";
+		};
+		77D066891B174ED000CA0470 /* mgraph */ = {
+			isa = PBXGroup;
+			children = (
+				77D066821B174E1000CA0470 /* mgraph.cpp */,
+				77D066831B174E1000CA0470 /* mgraph.h */,
+			);
+			name = mgraph;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,6 +145,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77D066841B174E1000CA0470 /* mgraph.cpp in Sources */,
+				77D066871B174E6500CA0470 /* sgraph.cpp in Sources */,
 				77310F641B1491F9004E2393 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -235,6 +264,7 @@
 				77310F691B1491F9004E2393 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

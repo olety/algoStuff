@@ -13,79 +13,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <float.h>
-#include <vector>
-
-class Graph {
-private:
-    std::vector<std::vector<double> > nodeMatrix;
-public:
-    Graph( int nodes );
-    ~Graph();
-    void insertEdge( int node1, int node2, double weight );
-    bool findEdge( int node1, int node2, double &weight );
-    void showAsMatrix();
-    void showAsArray();
-};
-
-Graph::Graph ( int nodes ){
-    this->nodeMatrix.resize((size_t) nodes);
-    for ( int i = 0; i < nodes; i++ ){
-        this->nodeMatrix[i].resize((size_t) nodes);
-        for ( int j = 0; j < nodes; j++ ){
-            if ( i == j ){
-                this->nodeMatrix[i][j] = 0;
-                continue;
-            }
-            this->nodeMatrix[i][j] = DBL_MAX;
-        }
-    }
-}
-
-Graph::~Graph (){
-    
-}
-
-void Graph::insertEdge( int node1, int node2, double weight){
-    if ( node1 == node2 || node1 >= this->nodeMatrix.size() || node2 >= this->nodeMatrix.size() )
-        return;
-    this->nodeMatrix[node1][node2] = weight;
-//    this->nodeMatrix[node2][node1] = weight;
-}
-
-bool Graph::findEdge( int node1, int node2, double &weight){
-    if ( node1 >= this->nodeMatrix.size() || node2 >= this->nodeMatrix.size()
-        || this->nodeMatrix[node1][node2] == DBL_MAX || node1 == node2 )
-        return false;
-    weight = this->nodeMatrix[node1][node2];
-    return true;
-}
-
-void Graph::showAsMatrix(){
-    for ( int i = 0; i < (int) this->nodeMatrix.size(); i++ ){
-        for ( int j = 0; j < (int) this->nodeMatrix.size(); j++ ){
-            if ( this->nodeMatrix[i][j] == DBL_MAX ){
-                std::cout << "-," ;
-                continue;
-            }
-            std::cout << this->nodeMatrix[i][j] << ",";
-        }
-        std::cout << std::endl;
-    }
-}
-
-void Graph::showAsArray(){
-    for ( int i = 0; i < (int) this->nodeMatrix.size(); i++ ){
-        std::cout << i << ":";
-        for ( int j = 0; j < (int) this->nodeMatrix.size(); j++ ){
-            if ( this->nodeMatrix[i][j] == DBL_MAX || i == j){
-                continue;
-            }
-            std::cout << j << "(" << this->nodeMatrix[i][j] << ")" << ",";
-        }
-        std::cout << std::endl;
-    }
-}
+#include "mgraph.h"
 
 bool isCommand(const std::string command,const char *mnemonic){
     return command==mnemonic;
@@ -96,8 +24,8 @@ int main(){
     int currentG = 0, i, value1, value2, k;
     double value3;
 //    bool retBool = false;
-    std::vector<Graph*> g;
-//    std::cout << "START" << std::endl;
+    std::vector<mGraph*> g;
+    std::cout << "START" << std::endl;
     while(true){
         getline(std::cin,line);
         std::stringstream stream(line);
@@ -109,7 +37,7 @@ int main(){
         }
         
         // copy line on output with exclamation mark
-       // std::cout << "!" << line << std::endl;
+        std::cout << "!" << line << std::endl;
         
         // change to uppercase
         command[0]=toupper(command[0]);
@@ -149,7 +77,7 @@ int main(){
         stream >> value2;
         
         if(isCommand(command,"LG")){ //loadGraph, value1 = nodes, value2 = edges
-            g[currentG] = new Graph( value1 );
+            g[currentG] = new mGraph( value1 );
             k = value2;
             for ( i = 0; i < k; i++ ){
                 getline(std::cin,line);
@@ -161,7 +89,7 @@ int main(){
         }
         
         if(isCommand(command,"FE")){ //findEdge
-            if ( !(g[currentG]->findEdge(value1, value2, value3))){ //should it return val, if node1==node2?
+            if ( !(g[currentG]->findEdge(value1, value2, value3))){
                 std::cout << "false" << std::endl;
                 continue;
             }
