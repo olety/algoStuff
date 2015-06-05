@@ -16,8 +16,8 @@ private:
     int minUnvisited ( std::vector<double> paths, std::vector<int> unvisited );
     double getEdge( int node1, int node2 );
 public:
-    spGraph( int nodes );
-    std::vector<double> sssp( int node );
+    spGraph ( int nodes );
+    std::vector<double> sssp ( int node );
     void printSP ( int node );
 };
 

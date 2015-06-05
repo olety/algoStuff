@@ -64,9 +64,7 @@ std::vector<double> spGraph::sssp ( int node ){
     cur_node = node;
     
     while ( !all0(unvisited) ){
-    
         connections = this->getConnections(cur_node);
-        
         for ( i = 0; i < connections.size(); i++ ){
             if ( unvisited[connections[i]] ){
                 paths[connections[i]] = min(this->getEdge( cur_node, connections[i] ) + paths[cur_node],
@@ -76,7 +74,7 @@ std::vector<double> spGraph::sssp ( int node ){
         unvisited[cur_node] = 0;
         cur_node = this->minUnvisited( paths, unvisited );
     }
-   
+    
     return paths;
 }
 
