@@ -106,9 +106,9 @@ void showPreorder( BST &tree ){
 
 void showInorder( Element *node ){
     if ( node != NULL ){
-        showPreorder( node->left );
+        showInorder( node->left );
         showElement( *node );
-        showPreorder( node->right );
+        showInorder( node->right );
     }
 }
 
