@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9D385CC0-C043-4743-8C18-0FFBC8292274</string>
+	<key>IDESourceControlProjectName</key>
+	<string>lab5</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>08D5659B46EBE68B789CBC7E0203554DCDECA7FD</key>
+		<string>bitbucket.org:olety/algolab.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>lab5/lab5.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>08D5659B46EBE68B789CBC7E0203554DCDECA7FD</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>bitbucket.org:olety/algolab.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>08D5659B46EBE68B789CBC7E0203554DCDECA7FD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>08D5659B46EBE68B789CBC7E0203554DCDECA7FD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>my_labs</string>
+		</dict>
+	</array>
+</dict>
+</plist>

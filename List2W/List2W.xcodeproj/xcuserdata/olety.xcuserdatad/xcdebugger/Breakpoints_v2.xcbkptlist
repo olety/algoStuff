@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "lab4/main.cpp"
+            timestampString = "448471589.823225"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+<<<<<<< HEAD
+            endingLineNumber = "76">
+=======
+            endingLineNumber = "76"
+            landmarkName = "insertElem ( List2W&amp; l, Element&amp; elem)"
+            landmarkType = "7">
+>>>>>>> lab4
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "lab4/main.cpp"
+            timestampString = "448547274.465853"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "98"
+<<<<<<< HEAD
+            endingLineNumber = "98">
+=======
+            endingLineNumber = "98"
+            landmarkName = "findKey(List2W&amp; l, int key, Element&amp; elem)"
+            landmarkType = "7">
+>>>>>>> lab4
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
